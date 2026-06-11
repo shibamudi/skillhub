@@ -7,5 +7,8 @@ public record SkillMetadata(
     String description,
     String version,
     String body,
-    Map<String, Object> frontmatter
+    Map<String, Object> frontmatter,
+    String author,
+    String sourcePlatform,
+    String sourceUrl
 ) {}

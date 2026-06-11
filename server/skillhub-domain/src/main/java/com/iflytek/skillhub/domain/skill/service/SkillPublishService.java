@@ -360,7 +360,7 @@ public class SkillPublishService {
         SkillMetadata metadata = skillMetadataParser.parse(skillMdContent);
         if (metadata.version() == null || metadata.version().isBlank()) {
             String autoVersion = AUTO_VERSION_FORMATTER.format(currentTime());
-            metadata = new SkillMetadata(metadata.name(), metadata.description(), autoVersion, metadata.body(), metadata.frontmatter());
+            metadata = new SkillMetadata(metadata.name(), metadata.description(), autoVersion, metadata.body(), metadata.frontmatter(), metadata.author(), metadata.sourcePlatform(), metadata.sourceUrl());
         }
         String skillSlug = SlugValidator.slugify(metadata.name());
 
@@ -543,6 +543,9 @@ public class SkillPublishService {
         // 12. Update skill metadata and move the published pointer for auto-publish flows
         skill.setDisplayName(metadata.name());
         skill.setSummary(metadata.description());
+        skill.setAuthorName(metadata.author());
+        skill.setSourcePlatform(metadata.sourcePlatform());
+        skill.setSourceUrl(metadata.sourceUrl());
         if (autoPublish || visibility == SkillVisibility.PRIVATE) {
             // Update latestVersionId for autoPublish or PRIVATE skill (UPLOADED status)
             skill.setLatestVersionId(version.getId());

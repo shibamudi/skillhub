@@ -4297,6 +4297,9 @@ export interface components {
             displayName?: string;
             ownerId?: string;
             ownerDisplayName?: string;
+            authorName?: string;
+            sourcePlatform?: string;
+            sourceUrl?: string;
             summary?: string;
             visibility?: string;
             status?: string;

@@ -31,7 +31,7 @@ class BasicPrePublishValidatorTest {
 
         ValidationResult result = validator.validate(new PrePublishValidator.SkillPackageContext(
                 List.of(skillMd),
-                new SkillMetadata("Secret Skill", "desc", "1.0.0", "body", Map.of()),
+                new SkillMetadata("Secret Skill", "desc", "1.0.0", "body", Map.of(), null, null, null),
                 "user-1",
                 1L
         ));
@@ -65,7 +65,7 @@ class BasicPrePublishValidatorTest {
 
         ValidationResult result = validator.validate(new PrePublishValidator.SkillPackageContext(
                 List.of(skillMd, readme),
-                new SkillMetadata("Safe Skill", "desc", "1.0.0", "body", Map.of()),
+                new SkillMetadata("Safe Skill", "desc", "1.0.0", "body", Map.of(), null, null, null),
                 "user-1",
                 1L
         ));
@@ -91,7 +91,7 @@ class BasicPrePublishValidatorTest {
 
         ValidationResult result = validator.validate(new PrePublishValidator.SkillPackageContext(
                 List.of(skillMd),
-                new SkillMetadata("Example Skill", "desc", "1.0.0", "body", Map.of()),
+                new SkillMetadata("Example Skill", "desc", "1.0.0", "body", Map.of(), null, null, null),
                 "user-1",
                 1L
         ));

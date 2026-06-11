@@ -235,7 +235,7 @@ class ReviewServiceTest {
             skill.setSummary("Published Summary");
             skill.setUpdatedBy("previous-reviewer");
             assertDoesNotThrow(() -> sv.setParsedMetadataJson(objectMapper.writeValueAsString(
-                    new SkillMetadata("Approved Name", "Approved Summary", "1.0.0", "Body", Map.of())
+                    new SkillMetadata("Approved Name", "Approved Summary", "1.0.0", "Body", Map.of(), null, null, null)
             )));
 
             when(reviewTaskRepository.findById(REVIEW_TASK_ID)).thenReturn(Optional.of(task));
