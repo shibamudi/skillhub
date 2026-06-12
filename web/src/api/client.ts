@@ -84,6 +84,19 @@ function getApiBaseUrl(): string {
   return getRuntimeConfig().apiBaseUrl ?? ''
 }
 
+function getBasePath(): string {
+  const basePath = import.meta.env.VITE_BASE_PATH ?? '/'
+  return basePath === '/' ? '' : basePath.replace(/\/+$/, '')
+}
+
+export function prependBasePath(path: string): string {
+  const base = getBasePath()
+  if (!base || path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+  return `${base}${path.startsWith('/') ? path : `/${path}`}`
+}
+
 function parseBooleanFlag(value: string | undefined): boolean {
   if (!value) {
     return false
@@ -394,7 +407,7 @@ export const authApi = {
   },
 
   async logout(): Promise<void> {
-    const response = await fetch('/api/v1/auth/logout', {
+    const response = await fetch(withBaseUrl('/api/v1/auth/logout'), {
       method: 'POST',
       headers: withCsrf(),
     })
