@@ -20,6 +20,7 @@ import com.iflytek.skillhub.dto.ProfileUpdateStatus;
 import com.iflytek.skillhub.dto.UpdateProfileRequest;
 import com.iflytek.skillhub.dto.UpdateProfileResponse;
 import com.iflytek.skillhub.dto.UserProfileResponse;
+import com.iflytek.skillhub.exception.ForbiddenException;
 import com.iflytek.skillhub.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -129,7 +130,7 @@ public class UserProfileController extends BaseApiController {
 
         // Block profile editing for trusted-header auth users (server-side enforcement)
         if ("trusted-header".equals(principal.oauthProvider())) {
-            throw new UnsupportedOperationException("error.profile.trustedHeaderReadOnly");
+            throw new ForbiddenException("error.profile.trustedHeaderReadOnly");
         }
 
         // Ensure at least one field is provided

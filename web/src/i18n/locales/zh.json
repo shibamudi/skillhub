@@ -730,7 +730,8 @@
     "partiallyAppliedTitle": "部分已生效",
     "partiallyAppliedDescription": "部分修改已立即生效，其余修改正在等待管理员审核。",
     "noChanges": "没有需要保存的修改。",
-    "userId": "用户 ID"
+    "userId": "用户 ID",
+    "trustedHeaderReadOnly": "你的信息来自外部认证系统同步，无法在此编辑。"
   },
   "security": {
     "title": "安全设置",

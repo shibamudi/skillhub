@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -83,6 +82,12 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
             try {
                 // Find or auto-provision user (with retry for race condition)
                 UserAccount user = findOrProvisionUser(userId, request);
+
+                if (!user.isActive()) {
+                    log.debug("Rejecting disabled user: {}", userId);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
 
                 // Sync user info from headers
                 syncUserInfo(user, request);
@@ -189,7 +194,7 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
         }
 
         if (changed) {
-            userAccountRepository.save(user);
+            transactionTemplate.execute(status -> userAccountRepository.save(user));
             log.debug("Synced user info from trusted header: {}", user.getId());
         }
     }
