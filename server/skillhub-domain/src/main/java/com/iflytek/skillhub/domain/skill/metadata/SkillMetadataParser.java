@@ -54,7 +54,7 @@ public class SkillMetadataParser {
             extractOptionalField(frontmatter, "author"),
             extractOptionalField(frontmatter, "source_platform"),
             extractOptionalField(frontmatter, "source_url")
-        );
+        ).withValidatedSourceUrl();
 
         return new SkillMetadata(name, description, version, body, frontmatter, attribution);
     }

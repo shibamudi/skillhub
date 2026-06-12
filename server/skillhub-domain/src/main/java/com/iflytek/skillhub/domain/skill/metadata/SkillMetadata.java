@@ -19,7 +19,7 @@ public record SkillMetadata(
             nonBlankOrDefault(override.author(), attribution.author()),
             nonBlankOrDefault(override.sourcePlatform(), attribution.sourcePlatform()),
             nonBlankOrDefault(override.sourceUrl(), attribution.sourceUrl())
-        );
+        ).withValidatedSourceUrl();
         return new SkillMetadata(name, description, version, body, frontmatter, merged);
     }
 

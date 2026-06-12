@@ -13,7 +13,9 @@ import com.iflytek.skillhub.dto.ApiResponseFactory;
 import com.iflytek.skillhub.dto.PublishResponse;
 import com.iflytek.skillhub.metrics.SkillHubMetrics;
 import com.iflytek.skillhub.ratelimit.RateLimit;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +32,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping({"/api/v1/skills", "/api/web/skills"})
+@Validated
 public class SkillPublishController extends BaseApiController {
 
     private final SkillPublishService skillPublishService;
@@ -57,9 +60,9 @@ public class SkillPublishController extends BaseApiController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("visibility") String visibility,
             @RequestParam(value = "confirmWarnings", defaultValue = "false") boolean confirmWarnings,
-            @RequestParam(value = "authorName", required = false) String authorName,
-            @RequestParam(value = "sourcePlatform", required = false) String sourcePlatform,
-            @RequestParam(value = "sourceUrl", required = false) String sourceUrl,
+            @RequestParam(value = "authorName", required = false) @Size(max = 256) String authorName,
+            @RequestParam(value = "sourcePlatform", required = false) @Size(max = 128) String sourcePlatform,
+            @RequestParam(value = "sourceUrl", required = false) @Size(max = 512) String sourceUrl,
             @AuthenticationPrincipal PlatformPrincipal principal) throws IOException {
 
         SkillVisibility skillVisibility = SkillVisibility.valueOf(visibility.toUpperCase());
