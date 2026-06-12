@@ -236,6 +236,9 @@ export interface SkillDetail {
   ownerPreviewVersion?: SkillLifecycleVersion
   ownerPreviewReviewComment?: string
   resolutionMode?: string
+  authorName?: string
+  sourcePlatform?: string
+  sourceUrl?: string
 }
 
 export interface SubmitPromotionRequest {
