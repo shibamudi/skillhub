@@ -5,6 +5,7 @@ import com.iflytek.skillhub.controller.BaseApiController;
 import com.iflytek.skillhub.controller.support.SkillPackageArchiveExtractor;
 import com.iflytek.skillhub.domain.shared.exception.DomainBadRequestException;
 import com.iflytek.skillhub.domain.skill.SkillVisibility;
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.service.SkillPublishService;
 import com.iflytek.skillhub.domain.skill.validation.PackageEntry;
 import com.iflytek.skillhub.dto.ApiResponse;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -61,6 +64,22 @@ public class SkillPublishController extends BaseApiController {
 
         SkillVisibility skillVisibility = SkillVisibility.valueOf(visibility.toUpperCase());
 
+        // Validate sourceUrl is actually a URL to prevent XSS via javascript: or data: schemes
+        if (sourceUrl != null && !sourceUrl.isBlank()) {
+            try {
+                new URL(sourceUrl);
+                String lower = sourceUrl.toLowerCase();
+                if (!lower.startsWith("http://") && !lower.startsWith("https://")) {
+                    throw new DomainBadRequestException("error.skill.publish.sourceUrl.invalid",
+                            "sourceUrl must use http:// or https:// scheme");
+                }
+            } catch (MalformedURLException e) {
+                throw new DomainBadRequestException("error.skill.publish.sourceUrl.invalid", e.getMessage());
+            }
+        }
+
+        Attribution attribution = new Attribution(authorName, sourcePlatform, sourceUrl);
+
         List<PackageEntry> entries;
         List<String> extractionWarnings;
         try {
@@ -85,9 +104,7 @@ public class SkillPublishController extends BaseApiController {
                 skillVisibility,
                 principal.platformRoles(),
                 confirmWarnings,
-                authorName,
-                sourcePlatform,
-                sourceUrl
+                attribution
         );
 
         PublishResponse response = new PublishResponse(

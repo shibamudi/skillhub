@@ -352,9 +352,9 @@ public class ReviewService {
             SkillMetadata metadata = objectMapper.readValue(metadataJson, SkillMetadata.class);
             skill.setDisplayName(metadata.name());
             skill.setSummary(metadata.description());
-            skill.setAuthorName(metadata.author());
-            skill.setSourcePlatform(metadata.sourcePlatform());
-            skill.setSourceUrl(metadata.sourceUrl());
+            skill.setAuthorName(metadata.attribution().author());
+            skill.setSourcePlatform(metadata.attribution().sourcePlatform());
+            skill.setSourceUrl(metadata.attribution().sourceUrl());
         } catch (Exception e) {
             throw new IllegalStateException("Failed to deserialize skill metadata", e);
         }

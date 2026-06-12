@@ -50,11 +50,13 @@ public class SkillMetadataParser {
         String name = extractRequiredField(frontmatter, "name");
         String description = extractRequiredField(frontmatter, "description");
         String version = extractOptionalField(frontmatter, "version");
-        String author = extractOptionalField(frontmatter, "author");
-        String sourcePlatform = extractOptionalField(frontmatter, "source_platform");
-        String sourceUrl = extractOptionalField(frontmatter, "source_url");
+        Attribution attribution = new Attribution(
+            extractOptionalField(frontmatter, "author"),
+            extractOptionalField(frontmatter, "source_platform"),
+            extractOptionalField(frontmatter, "source_url")
+        );
 
-        return new SkillMetadata(name, description, version, body, frontmatter, author, sourcePlatform, sourceUrl);
+        return new SkillMetadata(name, description, version, body, frontmatter, attribution);
     }
 
     private Map<String, Object> parseFrontmatter(String yamlContent) {

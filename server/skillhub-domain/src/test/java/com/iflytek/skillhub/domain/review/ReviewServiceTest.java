@@ -17,6 +17,7 @@ import com.iflytek.skillhub.domain.skill.SkillVersionRepository;
 import com.iflytek.skillhub.domain.skill.SkillVersionStatus;
 import com.iflytek.skillhub.domain.skill.SkillVisibility;
 import com.iflytek.skillhub.domain.skill.service.SkillGovernanceService;
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.metadata.SkillMetadata;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -235,7 +236,7 @@ class ReviewServiceTest {
             skill.setSummary("Published Summary");
             skill.setUpdatedBy("previous-reviewer");
             assertDoesNotThrow(() -> sv.setParsedMetadataJson(objectMapper.writeValueAsString(
-                    new SkillMetadata("Approved Name", "Approved Summary", "1.0.0", "Body", Map.of(), null, null, null)
+                    new SkillMetadata("Approved Name", "Approved Summary", "1.0.0", "Body", Map.of(), Attribution.EMPTY)
             )));
 
             when(reviewTaskRepository.findById(REVIEW_TASK_ID)).thenReturn(Optional.of(task));

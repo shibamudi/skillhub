@@ -20,6 +20,7 @@ import {
   normalizeSelectValue,
 } from '@/shared/ui/select'
 import { Label } from '@/shared/ui/label'
+import { Input } from '@/shared/ui/input'
 import { Card } from '@/shared/ui/card'
 import { usePublishSkill } from '@/shared/hooks/use-skill-queries'
 import { useMyNamespaces } from '@/shared/hooks/use-namespace-queries'
@@ -30,6 +31,18 @@ import { ApiError } from '@/api/client'
 
 const EMPTY_NAMESPACE_VALUE = '__select_namespace__'
 
+interface AttributionFields {
+  authorName: string
+  sourcePlatform: string
+  sourceUrl: string
+}
+
+const EMPTY_ATTRIBUTION: AttributionFields = {
+  authorName: '',
+  sourcePlatform: '',
+  sourceUrl: '',
+}
+
 export function PublishPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -38,9 +51,7 @@ export function PublishPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [namespaceSlug, setNamespaceSlug] = useState<string>(prefill.namespace)
   const [visibility, setVisibility] = useState<string>(prefill.visibility)
-  const [authorName, setAuthorName] = useState<string>('')
-  const [sourcePlatform, setSourcePlatform] = useState<string>('')
-  const [sourceUrl, setSourceUrl] = useState<string>('')
+  const [attribution, setAttribution] = useState<AttributionFields>(EMPTY_ATTRIBUTION)
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const [precheckWarnings, setPrecheckWarnings] = useState<string[]>([])
 
@@ -54,6 +65,7 @@ export function PublishPage() {
   useEffect(() => {
     setNamespaceSlug(prefill.namespace)
     setVisibility(prefill.visibility)
+    setAttribution(EMPTY_ATTRIBUTION)
   }, [prefill.namespace, prefill.visibility])
 
   const handleRemoveSelectedFile = () => {
@@ -80,9 +92,9 @@ export function PublishPage() {
         file: selectedFile,
         visibility,
         confirmWarnings,
-        authorName: authorName.trim() || undefined,
-        sourcePlatform: sourcePlatform.trim() || undefined,
-        sourceUrl: sourceUrl.trim() || undefined,
+        authorName: attribution.authorName.trim() || undefined,
+        sourcePlatform: attribution.sourcePlatform.trim() || undefined,
+        sourceUrl: attribution.sourceUrl.trim() || undefined,
       })
       setPrecheckWarnings([])
       setWarningDialogOpen(false)
@@ -234,42 +246,31 @@ export function PublishPage() {
           <div className="text-sm text-muted-foreground">
             {t('publish.attributionHint')}
           </div>
-          <div className="space-y-3">
-            <Label htmlFor="authorName" className="text-sm font-semibold font-heading">{t('publish.authorName')}</Label>
-            <input
-              id="authorName"
-              type="text"
-              value={authorName}
-              onChange={(e) => setAuthorName(e.target.value)}
-              placeholder={t('publish.authorNamePlaceholder')}
-              className="w-full h-11 px-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              disabled={publishMutation.isPending}
-            />
-          </div>
-          <div className="space-y-3">
-            <Label htmlFor="sourcePlatform" className="text-sm font-semibold font-heading">{t('publish.sourcePlatform')}</Label>
-            <input
-              id="sourcePlatform"
-              type="text"
-              value={sourcePlatform}
-              onChange={(e) => setSourcePlatform(e.target.value)}
-              placeholder={t('publish.sourcePlatformPlaceholder')}
-              className="w-full h-11 px-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              disabled={publishMutation.isPending}
-            />
-          </div>
-          <div className="space-y-3">
-            <Label htmlFor="sourceUrl" className="text-sm font-semibold font-heading">{t('publish.sourceUrl')}</Label>
-            <input
-              id="sourceUrl"
-              type="url"
-              value={sourceUrl}
-              onChange={(e) => setSourceUrl(e.target.value)}
-              placeholder={t('publish.sourceUrlPlaceholder')}
-              className="w-full h-11 px-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-              disabled={publishMutation.isPending}
-            />
-          </div>
+          <AttributionInput
+            id="authorName"
+            label={t('publish.authorName')}
+            placeholder={t('publish.authorNamePlaceholder')}
+            value={attribution.authorName}
+            onChange={(v) => setAttribution((prev) => ({ ...prev, authorName: v }))}
+            disabled={publishMutation.isPending}
+          />
+          <AttributionInput
+            id="sourcePlatform"
+            label={t('publish.sourcePlatform')}
+            placeholder={t('publish.sourcePlatformPlaceholder')}
+            value={attribution.sourcePlatform}
+            onChange={(v) => setAttribution((prev) => ({ ...prev, sourcePlatform: v }))}
+            disabled={publishMutation.isPending}
+          />
+          <AttributionInput
+            id="sourceUrl"
+            label={t('publish.sourceUrl')}
+            placeholder={t('publish.sourceUrlPlaceholder')}
+            type="url"
+            value={attribution.sourceUrl}
+            onChange={(v) => setAttribution((prev) => ({ ...prev, sourceUrl: v }))}
+            disabled={publishMutation.isPending}
+          />
         </div>
 
         <Button
@@ -301,6 +302,32 @@ export function PublishPage() {
         confirmText={t('publish.warningConfirmContinue')}
         cancelText={t('publish.warningConfirmCancel')}
         onConfirm={() => publishSkill(true)}
+      />
+    </div>
+  )
+}
+
+interface AttributionInputProps {
+  id: string
+  label: string
+  placeholder: string
+  type?: string
+  value: string
+  onChange: (value: string) => void
+  disabled?: boolean
+}
+
+function AttributionInput({ id, label, placeholder, type = 'text', value, onChange, disabled }: AttributionInputProps) {
+  return (
+    <div className="space-y-3">
+      <Label htmlFor={id} className="text-sm font-semibold font-heading">{label}</Label>
+      <Input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        disabled={disabled}
       />
     </div>
   )
