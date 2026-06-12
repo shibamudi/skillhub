@@ -38,6 +38,9 @@ export function PublishPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [namespaceSlug, setNamespaceSlug] = useState<string>(prefill.namespace)
   const [visibility, setVisibility] = useState<string>(prefill.visibility)
+  const [authorName, setAuthorName] = useState<string>('')
+  const [sourcePlatform, setSourcePlatform] = useState<string>('')
+  const [sourceUrl, setSourceUrl] = useState<string>('')
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const [precheckWarnings, setPrecheckWarnings] = useState<string[]>([])
 
@@ -77,6 +80,9 @@ export function PublishPage() {
         file: selectedFile,
         visibility,
         confirmWarnings,
+        authorName: authorName.trim() || undefined,
+        sourcePlatform: sourcePlatform.trim() || undefined,
+        sourceUrl: sourceUrl.trim() || undefined,
       })
       setPrecheckWarnings([])
       setWarningDialogOpen(false)
@@ -222,6 +228,48 @@ export function PublishPage() {
               </Button>
             </div>
           )}
+        </div>
+
+        <div className="space-y-4 pt-4 border-t border-border/40">
+          <div className="text-sm text-muted-foreground">
+            {t('publish.attributionHint')}
+          </div>
+          <div className="space-y-3">
+            <Label htmlFor="authorName" className="text-sm font-semibold font-heading">{t('publish.authorName')}</Label>
+            <input
+              id="authorName"
+              type="text"
+              value={authorName}
+              onChange={(e) => setAuthorName(e.target.value)}
+              placeholder={t('publish.authorNamePlaceholder')}
+              className="w-full h-11 px-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              disabled={publishMutation.isPending}
+            />
+          </div>
+          <div className="space-y-3">
+            <Label htmlFor="sourcePlatform" className="text-sm font-semibold font-heading">{t('publish.sourcePlatform')}</Label>
+            <input
+              id="sourcePlatform"
+              type="text"
+              value={sourcePlatform}
+              onChange={(e) => setSourcePlatform(e.target.value)}
+              placeholder={t('publish.sourcePlatformPlaceholder')}
+              className="w-full h-11 px-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              disabled={publishMutation.isPending}
+            />
+          </div>
+          <div className="space-y-3">
+            <Label htmlFor="sourceUrl" className="text-sm font-semibold font-heading">{t('publish.sourceUrl')}</Label>
+            <input
+              id="sourceUrl"
+              type="url"
+              value={sourceUrl}
+              onChange={(e) => setSourceUrl(e.target.value)}
+              placeholder={t('publish.sourceUrlPlaceholder')}
+              className="w-full h-11 px-3 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              disabled={publishMutation.isPending}
+            />
+          </div>
         </div>
 
         <Button

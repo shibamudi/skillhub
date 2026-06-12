@@ -77,7 +77,8 @@ class SkillPublishControllerTest {
             eq("usr_1"),
             eq(SkillVisibility.PUBLIC),
             eq(Set.of("SUPER_ADMIN")),
-            eq(false)))
+            eq(false),
+            eq(null), eq(null), eq(null)))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(
@@ -128,7 +129,8 @@ class SkillPublishControllerTest {
             eq("usr_1"),
             eq(SkillVisibility.PUBLIC),
             eq(Set.of("SUPER_ADMIN")),
-            eq(true)))
+            eq(true),
+            eq(null), eq(null), eq(null)))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(
@@ -184,7 +186,8 @@ class SkillPublishControllerTest {
 
         verify(skillPublishService, never()).publishFromEntries(
             eq("global"), anyList(), eq("usr_1"),
-            eq(SkillVisibility.PUBLIC), eq(Set.of("SUPER_ADMIN")), eq(false));
+            eq(SkillVisibility.PUBLIC), eq(Set.of("SUPER_ADMIN")), eq(false),
+            eq(null), eq(null), eq(null));
     }
 
     @Test
@@ -198,7 +201,8 @@ class SkillPublishControllerTest {
         given(skillPublishService.publishFromEntries(
             eq("global"), ArgumentMatchers.<List<PackageEntry>>any(),
             eq("usr_1"), eq(SkillVisibility.PUBLIC),
-            eq(Set.of("SUPER_ADMIN")), eq(true)))
+            eq(Set.of("SUPER_ADMIN")), eq(true),
+            eq(null), eq(null), eq(null)))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(

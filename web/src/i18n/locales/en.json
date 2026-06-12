@@ -1362,7 +1362,14 @@
     "warningConfirmCancel": "Go back and fix",
     "frontmatterFailedTitle": "SKILL.md format is invalid",
     "frontmatterFailedDescription": "Please check the YAML frontmatter at the top of SKILL.md. If a field value contains a colon, wrap it in quotes.",
-    "selectRequired": "Please select namespace and file"
+    "selectRequired": "Please select namespace and file",
+    "attributionHint": "Optional attribution fields below — use them to credit the original author and source.",
+    "authorName": "Original Author",
+    "authorNamePlaceholder": "Name of the original author",
+    "sourcePlatform": "Source Platform",
+    "sourcePlatformPlaceholder": "e.g. GitHub, npm, HuggingFace",
+    "sourceUrl": "Source URL",
+    "sourceUrlPlaceholder": "https://github.com/user/repo"
   },
   "toast": {
     "success": "Success",

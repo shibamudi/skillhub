@@ -274,7 +274,21 @@ public class SkillPublishService {
             SkillVisibility visibility,
             java.util.Set<String> platformRoles,
             boolean confirmWarnings) {
-        return publishFromEntriesInternal(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, false, false);
+        return publishFromEntriesInternal(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, false, false, null, null, null);
+    }
+
+    @Transactional
+    public PublishResult publishFromEntries(
+            String namespaceSlug,
+            List<PackageEntry> entries,
+            String publisherId,
+            SkillVisibility visibility,
+            java.util.Set<String> platformRoles,
+            boolean confirmWarnings,
+            String overrideAuthor,
+            String overrideSourcePlatform,
+            String overrideSourceUrl) {
+        return publishFromEntriesInternal(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, false, false, overrideAuthor, overrideSourcePlatform, overrideSourceUrl);
     }
 
     /**
@@ -315,7 +329,8 @@ public class SkillPublishService {
                 Set.of(),
                 confirmWarnings,  // confirmWarnings: honour caller's choice for rerelease
                 false,  // forceAutoPublish=false: respect visibility rules
-                true
+                true,
+                null, null, null  // rerelease preserves existing attribution
         );
     }
 
@@ -327,7 +342,10 @@ public class SkillPublishService {
             Set<String> platformRoles,
             boolean confirmWarnings,
             boolean forceAutoPublish,
-            boolean bypassMembershipCheck) {
+            boolean bypassMembershipCheck,
+            String overrideAuthor,
+            String overrideSourcePlatform,
+            String overrideSourceUrl) {
 
         // 1. Find namespace by slug
         Namespace namespace = namespaceRepository.findBySlug(namespaceSlug)
@@ -361,6 +379,15 @@ public class SkillPublishService {
         if (metadata.version() == null || metadata.version().isBlank()) {
             String autoVersion = AUTO_VERSION_FORMATTER.format(currentTime());
             metadata = new SkillMetadata(metadata.name(), metadata.description(), autoVersion, metadata.body(), metadata.frontmatter(), metadata.author(), metadata.sourcePlatform(), metadata.sourceUrl());
+        }
+        // Apply form-provided attribution overrides (take precedence over SKILL.md frontmatter)
+        if (overrideAuthor != null || overrideSourcePlatform != null || overrideSourceUrl != null) {
+            metadata = new SkillMetadata(
+                    metadata.name(), metadata.description(), metadata.version(), metadata.body(), metadata.frontmatter(),
+                    overrideAuthor != null ? overrideAuthor : metadata.author(),
+                    overrideSourcePlatform != null ? overrideSourcePlatform : metadata.sourcePlatform(),
+                    overrideSourceUrl != null ? overrideSourceUrl : metadata.sourceUrl()
+            );
         }
         String skillSlug = SlugValidator.slugify(metadata.name());
 

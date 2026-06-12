@@ -54,6 +54,9 @@ public class SkillPublishController extends BaseApiController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("visibility") String visibility,
             @RequestParam(value = "confirmWarnings", defaultValue = "false") boolean confirmWarnings,
+            @RequestParam(value = "authorName", required = false) String authorName,
+            @RequestParam(value = "sourcePlatform", required = false) String sourcePlatform,
+            @RequestParam(value = "sourceUrl", required = false) String sourceUrl,
             @AuthenticationPrincipal PlatformPrincipal principal) throws IOException {
 
         SkillVisibility skillVisibility = SkillVisibility.valueOf(visibility.toUpperCase());
@@ -81,7 +84,10 @@ public class SkillPublishController extends BaseApiController {
                 principal.userId(),
                 skillVisibility,
                 principal.platformRoles(),
-                confirmWarnings
+                confirmWarnings,
+                authorName,
+                sourcePlatform,
+                sourceUrl
         );
 
         PublishResponse response = new PublishResponse(

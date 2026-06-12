@@ -1363,7 +1363,14 @@
     "warningConfirmCancel": "返回修改",
     "frontmatterFailedTitle": "SKILL.md 格式有误",
     "frontmatterFailedDescription": "请检查 SKILL.md 顶部 frontmatter 的 YAML 格式。若字段值中包含冒号，请用引号包裹。",
-    "selectRequired": "请选择命名空间和文件"
+    "selectRequired": "请选择命名空间和文件",
+    "attributionHint": "以下为可选的作者归属信息，用于标注技能的原始作者和来源。",
+    "authorName": "原始作者",
+    "authorNamePlaceholder": "填写技能的原始作者名称",
+    "sourcePlatform": "来源平台",
+    "sourcePlatformPlaceholder": "例如：GitHub、npm、HuggingFace",
+    "sourceUrl": "来源地址",
+    "sourceUrlPlaceholder": "https://github.com/user/repo"
   },
   "toast": {
     "success": "成功",
