@@ -2,7 +2,7 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Eye, EyeOff } from 'lucide-react'
-import { getDirectAuthRuntimeConfig, getTrustedHeaderAuthRuntimeConfig } from '@/api/client'
+import { getDirectAuthRuntimeConfig, getTrustedHeaderAuthRuntimeConfig, prependBasePath } from '@/api/client'
 import { LoginButton } from '@/features/auth/login-button'
 import { SessionBootstrapEntry } from '@/features/auth/session-bootstrap-entry'
 import { useAuth } from '@/features/auth/use-auth'
@@ -40,7 +40,7 @@ export function LoginPage() {
 
   // TrustedHeader mode: if authenticated, redirect immediately
   if (trustedHeaderConfig.enabled && authUser) {
-    window.location.href = returnTo
+    window.location.href = prependBasePath(returnTo)
     return null
   }
 
