@@ -18,6 +18,7 @@ import com.iflytek.skillhub.domain.skill.SkillRepository;
 import com.iflytek.skillhub.domain.skill.SkillVersion;
 import com.iflytek.skillhub.domain.skill.SkillVersionRepository;
 import com.iflytek.skillhub.domain.skill.SkillVersionStatus;
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.metadata.SkillMetadata;
 import com.iflytek.skillhub.domain.skill.service.SkillGovernanceService;
 import jakarta.persistence.EntityManager;
@@ -352,6 +353,12 @@ public class ReviewService {
             SkillMetadata metadata = objectMapper.readValue(metadataJson, SkillMetadata.class);
             skill.setDisplayName(metadata.name());
             skill.setSummary(metadata.description());
+            Attribution attr = metadata.attribution();
+            if (attr != null) {
+                skill.setAuthorName(attr.author());
+                skill.setSourcePlatform(attr.sourcePlatform());
+                skill.setSourceUrl(attr.sourceUrl());
+            }
         } catch (Exception e) {
             throw new IllegalStateException("Failed to deserialize skill metadata", e);
         }

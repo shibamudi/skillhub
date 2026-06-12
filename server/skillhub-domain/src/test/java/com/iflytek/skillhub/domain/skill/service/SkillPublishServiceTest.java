@@ -13,6 +13,7 @@ import com.iflytek.skillhub.domain.review.ReviewTask;
 import com.iflytek.skillhub.domain.review.ReviewTaskRepository;
 import com.iflytek.skillhub.domain.shared.exception.DomainBadRequestException;
 import com.iflytek.skillhub.domain.skill.*;
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.metadata.SkillMetadata;
 import com.iflytek.skillhub.domain.skill.metadata.SkillMetadataParser;
 import com.iflytek.skillhub.domain.skill.validation.PackageEntry;
@@ -128,7 +129,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
@@ -188,7 +189,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         when(namespaceRepository.findBySlug(namespaceSlug)).thenReturn(Optional.of(namespace));
         when(namespaceMemberRepository.findByNamespaceIdAndUserId(any(), eq(publisherId))).thenReturn(Optional.of(member));
@@ -223,7 +224,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
 
@@ -271,7 +272,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
@@ -327,7 +328,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
@@ -387,7 +388,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
@@ -451,7 +452,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0-beta", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0-beta", "Body", Map.of(), Attribution.EMPTY);
 
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
@@ -503,7 +504,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("Smoke Skill Two", "Test", "0.2.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("Smoke Skill Two", "Test", "0.2.0", "Body", Map.of(), Attribution.EMPTY);
 
         Skill skill = new Skill(1L, "smoke-skill-two", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 2L);
@@ -548,7 +549,7 @@ class SkillPublishServiceTest {
 
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
-        SkillMetadata metadata = new SkillMetadata("Auto Skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("Auto Skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         Skill skill = new Skill(1L, "auto-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
@@ -596,7 +597,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
         Skill archivedSkill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         archivedSkill.setStatus(SkillStatus.ARCHIVED);
 
@@ -629,7 +630,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", null, "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", null, "Body", Map.of(), Attribution.EMPTY);
 
         when(namespaceRepository.findBySlug(namespaceSlug)).thenReturn(Optional.of(namespace));
         when(namespaceMemberRepository.findByNamespaceIdAndUserId(any(), eq(publisherId))).thenReturn(Optional.of(member));
@@ -715,7 +716,7 @@ class SkillPublishServiceTest {
 
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
-        SkillMetadata metadata = new SkillMetadata("Admin Skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("Admin Skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
         Skill skill = new Skill(1L, "admin-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
 
@@ -760,7 +761,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("Too Long Skill", longDescription, "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("Too Long Skill", longDescription, "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         when(namespaceRepository.findBySlug(namespaceSlug)).thenReturn(Optional.of(namespace));
         when(namespaceMemberRepository.findByNamespaceIdAndUserId(any(), eq(publisherId))).thenReturn(Optional.of(member));
@@ -828,7 +829,8 @@ class SkillPublishServiceTest {
                 "Original summary",
                 "1.2.4",
                 "Hello world",
-                Map.of("name", "Demo Skill", "description", "Original summary", "version", "1.2.4"));
+                Map.of("name", "Demo Skill", "description", "Original summary", "version", "1.2.4"),
+                Attribution.EMPTY);
 
         when(skillRepository.findById(skill.getId())).thenReturn(Optional.of(skill));
         when(namespaceRepository.findById(skill.getNamespaceId())).thenReturn(Optional.of(namespace));
@@ -929,7 +931,8 @@ class SkillPublishServiceTest {
                 "Original summary",
                 "1.2.4",
                 "Hello world",
-                Map.of("name", "Demo Skill", "description", "Original summary", "version", "1.2.4"));
+                Map.of("name", "Demo Skill", "description", "Original summary", "version", "1.2.4"),
+                Attribution.EMPTY);
 
         when(skillRepository.findById(skill.getId())).thenReturn(Optional.of(skill));
         when(namespaceRepository.findById(skill.getNamespaceId())).thenReturn(Optional.of(namespace));
@@ -988,7 +991,8 @@ class SkillPublishServiceTest {
         SkillFile skillMdFile = new SkillFile(sourceVersion.getId(), "SKILL.md", (long) sourceSkillMd.getBytes(StandardCharsets.UTF_8).length, "text/markdown", "hash1", "skills/11/21/SKILL.md");
         SkillMetadata rereleaseMetadata = new SkillMetadata(
                 "Demo Skill", "Original summary", "1.2.4", "Hello world",
-                Map.of("name", "Demo Skill", "description", "Original summary", "version", "1.2.4"));
+                Map.of("name", "Demo Skill", "description", "Original summary", "version", "1.2.4"),
+                Attribution.EMPTY);
 
         when(skillRepository.findById(skill.getId())).thenReturn(Optional.of(skill));
         when(namespaceRepository.findById(skill.getNamespaceId())).thenReturn(Optional.of(namespace));
@@ -1032,7 +1036,8 @@ class SkillPublishServiceTest {
         SkillFile skillMdFile = new SkillFile(sourceVersion.getId(), "SKILL.md", (long) sourceSkillMd.getBytes(StandardCharsets.UTF_8).length, "text/markdown", "hash1", "skills/11/21/SKILL.md");
         SkillMetadata rereleaseMetadata = new SkillMetadata(
                 "Demo Skill", "Original summary", "1.2.4", "Hello world",
-                Map.of("name", "Demo Skill", "description", "Original summary", "version", "1.2.4"));
+                Map.of("name", "Demo Skill", "description", "Original summary", "version", "1.2.4"),
+                Attribution.EMPTY);
 
         when(skillRepository.findById(skill.getId())).thenReturn(Optional.of(skill));
         when(namespaceRepository.findById(skill.getNamespaceId())).thenReturn(Optional.of(namespace));
@@ -1075,7 +1080,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         // Existing skill owned by another user with a published version
         Skill existingSkill = new Skill(1L, "test-skill", "user-100", SkillVisibility.PUBLIC);
@@ -1108,7 +1113,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         Skill existingSkill = new Skill(1L, "test-skill", "user-100", SkillVisibility.PRIVATE);
         setId(existingSkill, 1L);
@@ -1141,7 +1146,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         // Existing skill owned by another user with NO published version
         Skill existingSkill = new Skill(1L, "test-skill", "user-100", SkillVisibility.PUBLIC);
@@ -1186,7 +1191,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "2.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "2.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
@@ -1236,7 +1241,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "2.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "2.0.0", "Body", Map.of(), Attribution.EMPTY);
 
         // Skill was created with PRIVATE visibility
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PRIVATE);
@@ -1292,7 +1297,7 @@ class SkillPublishServiceTest {
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
         NamespaceMember member = mock(NamespaceMember.class);
-        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("test-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
         Skill skill = new Skill(1L, "test-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
 
@@ -1338,7 +1343,7 @@ class SkillPublishServiceTest {
 
         Namespace namespace = new Namespace(namespaceSlug, "Test NS", "user-1");
         setId(namespace, 1L);
-        SkillMetadata metadata = new SkillMetadata("admin-skill", "Test", "1.0.0", "Body", Map.of());
+        SkillMetadata metadata = new SkillMetadata("admin-skill", "Test", "1.0.0", "Body", Map.of(), Attribution.EMPTY);
         Skill skill = new Skill(1L, "admin-skill", publisherId, SkillVisibility.PUBLIC);
         setId(skill, 1L);
 

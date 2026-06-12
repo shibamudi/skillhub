@@ -1,5 +1,6 @@
 package com.iflytek.skillhub.domain.skill.validation;
 
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.metadata.SkillMetadata;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +32,7 @@ class BasicPrePublishValidatorTest {
 
         ValidationResult result = validator.validate(new PrePublishValidator.SkillPackageContext(
                 List.of(skillMd),
-                new SkillMetadata("Secret Skill", "desc", "1.0.0", "body", Map.of()),
+                new SkillMetadata("Secret Skill", "desc", "1.0.0", "body", Map.of(), Attribution.EMPTY),
                 "user-1",
                 1L
         ));
@@ -65,7 +66,7 @@ class BasicPrePublishValidatorTest {
 
         ValidationResult result = validator.validate(new PrePublishValidator.SkillPackageContext(
                 List.of(skillMd, readme),
-                new SkillMetadata("Safe Skill", "desc", "1.0.0", "body", Map.of()),
+                new SkillMetadata("Safe Skill", "desc", "1.0.0", "body", Map.of(), Attribution.EMPTY),
                 "user-1",
                 1L
         ));
@@ -91,7 +92,7 @@ class BasicPrePublishValidatorTest {
 
         ValidationResult result = validator.validate(new PrePublishValidator.SkillPackageContext(
                 List.of(skillMd),
-                new SkillMetadata("Example Skill", "desc", "1.0.0", "body", Map.of()),
+                new SkillMetadata("Example Skill", "desc", "1.0.0", "body", Map.of(), Attribution.EMPTY),
                 "user-1",
                 1L
         ));

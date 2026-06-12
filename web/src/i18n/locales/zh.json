@@ -796,6 +796,8 @@
     "packageLinkMissingTitle": "文件未找到",
     "packageLinkMissingDescription": "该链接指向的文件不在当前技能版本中。",
     "authorLabel": "作者 {{name}}",
+    "managerLabel": "管理者 {{name}}",
+    "sourceLabel": "来源",
     "expandOverview": "展开全文",
     "collapseOverview": "收起内容",
     "noDocumentationTitle": "这个版本没有概览文档",
@@ -1363,7 +1365,14 @@
     "warningConfirmCancel": "返回修改",
     "frontmatterFailedTitle": "SKILL.md 格式有误",
     "frontmatterFailedDescription": "请检查 SKILL.md 顶部 frontmatter 的 YAML 格式。若字段值中包含冒号，请用引号包裹。",
-    "selectRequired": "请选择命名空间和文件"
+    "selectRequired": "请选择命名空间和文件",
+    "attributionHint": "以下为可选的作者归属信息，用于标注技能的原始作者和来源。",
+    "authorName": "原始作者",
+    "authorNamePlaceholder": "填写技能的原始作者名称",
+    "sourcePlatform": "来源平台",
+    "sourcePlatformPlaceholder": "例如：GitHub、npm、HuggingFace",
+    "sourceUrl": "来源地址",
+    "sourceUrlPlaceholder": "https://github.com/user/repo"
   },
   "toast": {
     "success": "成功",

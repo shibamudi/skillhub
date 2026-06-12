@@ -31,6 +31,15 @@ public class Skill {
     @Column(name = "source_skill_id")
     private Long sourceSkillId;
 
+    @Column(name = "author_name", length = 256)
+    private String authorName;
+
+    @Column(name = "source_platform", length = 128)
+    private String sourcePlatform;
+
+    @Column(name = "source_url", length = 512)
+    private String sourceUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private SkillVisibility visibility;
@@ -129,6 +138,18 @@ public class Skill {
         return sourceSkillId;
     }
 
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public String getSourcePlatform() {
+        return sourcePlatform;
+    }
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
     public SkillVisibility getVisibility() {
         return visibility;
     }
@@ -200,6 +221,18 @@ public class Skill {
 
     public void setSourceSkillId(Long sourceSkillId) {
         this.sourceSkillId = sourceSkillId;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public void setSourcePlatform(String sourcePlatform) {
+        this.sourcePlatform = sourcePlatform;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
     }
 
     public void setVisibility(SkillVisibility visibility) {

@@ -5,6 +5,7 @@ import com.iflytek.skillhub.controller.BaseApiController;
 import com.iflytek.skillhub.controller.support.SkillPackageArchiveExtractor;
 import com.iflytek.skillhub.domain.shared.exception.DomainBadRequestException;
 import com.iflytek.skillhub.domain.skill.SkillVisibility;
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.service.SkillPublishService;
 import com.iflytek.skillhub.domain.skill.validation.PackageEntry;
 import com.iflytek.skillhub.dto.ApiResponse;
@@ -12,11 +13,15 @@ import com.iflytek.skillhub.dto.ApiResponseFactory;
 import com.iflytek.skillhub.dto.PublishResponse;
 import com.iflytek.skillhub.metrics.SkillHubMetrics;
 import com.iflytek.skillhub.ratelimit.RateLimit;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -27,6 +32,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping({"/api/v1/skills", "/api/web/skills"})
+@Validated
 public class SkillPublishController extends BaseApiController {
 
     private final SkillPublishService skillPublishService;
@@ -54,9 +60,28 @@ public class SkillPublishController extends BaseApiController {
             @RequestParam("file") MultipartFile file,
             @RequestParam("visibility") String visibility,
             @RequestParam(value = "confirmWarnings", defaultValue = "false") boolean confirmWarnings,
+            @RequestParam(value = "authorName", required = false) @Size(max = 256) String authorName,
+            @RequestParam(value = "sourcePlatform", required = false) @Size(max = 128) String sourcePlatform,
+            @RequestParam(value = "sourceUrl", required = false) @Size(max = 512) String sourceUrl,
             @AuthenticationPrincipal PlatformPrincipal principal) throws IOException {
 
         SkillVisibility skillVisibility = SkillVisibility.valueOf(visibility.toUpperCase());
+
+        // Validate sourceUrl is actually a URL to prevent XSS via javascript: or data: schemes
+        if (sourceUrl != null && !sourceUrl.isBlank()) {
+            try {
+                new URL(sourceUrl);
+                String lower = sourceUrl.toLowerCase();
+                if (!lower.startsWith("http://") && !lower.startsWith("https://")) {
+                    throw new DomainBadRequestException("error.skill.publish.sourceUrl.invalid",
+                            "sourceUrl must use http:// or https:// scheme");
+                }
+            } catch (MalformedURLException e) {
+                throw new DomainBadRequestException("error.skill.publish.sourceUrl.invalid", e.getMessage());
+            }
+        }
+
+        Attribution attribution = new Attribution(authorName, sourcePlatform, sourceUrl);
 
         List<PackageEntry> entries;
         List<String> extractionWarnings;
@@ -81,7 +106,8 @@ public class SkillPublishController extends BaseApiController {
                 principal.userId(),
                 skillVisibility,
                 principal.platformRoles(),
-                confirmWarnings
+                confirmWarnings,
+                attribution
         );
 
         PublishResponse response = new PublishResponse(

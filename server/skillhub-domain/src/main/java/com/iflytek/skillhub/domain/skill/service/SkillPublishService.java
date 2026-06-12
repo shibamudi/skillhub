@@ -16,6 +16,7 @@ import com.iflytek.skillhub.domain.security.SecurityScanService;
 import com.iflytek.skillhub.domain.shared.exception.DomainBadRequestException;
 import com.iflytek.skillhub.domain.shared.exception.DomainForbiddenException;
 import com.iflytek.skillhub.domain.skill.*;
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.metadata.SkillMetadata;
 import com.iflytek.skillhub.domain.skill.metadata.SkillMetadataParser;
 import com.iflytek.skillhub.domain.skill.validation.PackageEntry;
@@ -263,7 +264,7 @@ public class SkillPublishService {
             String publisherId,
             SkillVisibility visibility,
             java.util.Set<String> platformRoles) {
-        return publishFromEntries(namespaceSlug, entries, publisherId, visibility, platformRoles, false);
+        return publishFromEntries(namespaceSlug, entries, publisherId, visibility, platformRoles, false, Attribution.EMPTY);
     }
 
     @Transactional
@@ -274,7 +275,19 @@ public class SkillPublishService {
             SkillVisibility visibility,
             java.util.Set<String> platformRoles,
             boolean confirmWarnings) {
-        return publishFromEntriesInternal(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, false, false);
+        return publishFromEntries(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, Attribution.EMPTY);
+    }
+
+    @Transactional
+    public PublishResult publishFromEntries(
+            String namespaceSlug,
+            List<PackageEntry> entries,
+            String publisherId,
+            SkillVisibility visibility,
+            java.util.Set<String> platformRoles,
+            boolean confirmWarnings,
+            Attribution attribution) {
+        return publishFromEntriesInternal(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, false, false, attribution);
     }
 
     /**
@@ -315,7 +328,8 @@ public class SkillPublishService {
                 Set.of(),
                 confirmWarnings,  // confirmWarnings: honour caller's choice for rerelease
                 false,  // forceAutoPublish=false: respect visibility rules
-                true
+                true,
+                Attribution.EMPTY  // rerelease preserves existing attribution
         );
     }
 
@@ -327,7 +341,8 @@ public class SkillPublishService {
             Set<String> platformRoles,
             boolean confirmWarnings,
             boolean forceAutoPublish,
-            boolean bypassMembershipCheck) {
+            boolean bypassMembershipCheck,
+            Attribution attribution) {
 
         // 1. Find namespace by slug
         Namespace namespace = namespaceRepository.findBySlug(namespaceSlug)
@@ -360,8 +375,9 @@ public class SkillPublishService {
         SkillMetadata metadata = skillMetadataParser.parse(skillMdContent);
         if (metadata.version() == null || metadata.version().isBlank()) {
             String autoVersion = AUTO_VERSION_FORMATTER.format(currentTime());
-            metadata = new SkillMetadata(metadata.name(), metadata.description(), autoVersion, metadata.body(), metadata.frontmatter());
+            metadata = new SkillMetadata(metadata.name(), metadata.description(), autoVersion, metadata.body(), metadata.frontmatter(), metadata.attribution());
         }
+        metadata = metadata.withAttribution(attribution);
         String skillSlug = SlugValidator.slugify(metadata.name());
 
         // 5. Run PrePublishValidator
@@ -543,6 +559,9 @@ public class SkillPublishService {
         // 12. Update skill metadata and move the published pointer for auto-publish flows
         skill.setDisplayName(metadata.name());
         skill.setSummary(metadata.description());
+        skill.setAuthorName(metadata.attribution().author());
+        skill.setSourcePlatform(metadata.attribution().sourcePlatform());
+        skill.setSourceUrl(metadata.attribution().sourceUrl());
         if (autoPublish || visibility == SkillVisibility.PRIVATE) {
             // Update latestVersionId for autoPublish or PRIVATE skill (UPLOADED status)
             skill.setLatestVersionId(version.getId());

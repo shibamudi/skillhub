@@ -21,6 +21,7 @@ import com.iflytek.skillhub.domain.namespace.NamespaceMemberRepository;
 import com.iflytek.skillhub.domain.skill.SkillVersion;
 import com.iflytek.skillhub.domain.skill.SkillVersionStatus;
 import com.iflytek.skillhub.domain.skill.SkillVisibility;
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.service.SkillPublishService;
 import com.iflytek.skillhub.metrics.SkillHubMetrics;
 import java.io.ByteArrayOutputStream;
@@ -77,7 +78,8 @@ class SkillPublishControllerTest {
             eq("usr_1"),
             eq(SkillVisibility.PUBLIC),
             eq(Set.of("SUPER_ADMIN")),
-            eq(false)))
+            eq(false),
+            eq(Attribution.EMPTY)))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(
@@ -128,7 +130,8 @@ class SkillPublishControllerTest {
             eq("usr_1"),
             eq(SkillVisibility.PUBLIC),
             eq(Set.of("SUPER_ADMIN")),
-            eq(true)))
+            eq(true),
+            eq(Attribution.EMPTY)))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(
@@ -184,7 +187,8 @@ class SkillPublishControllerTest {
 
         verify(skillPublishService, never()).publishFromEntries(
             eq("global"), anyList(), eq("usr_1"),
-            eq(SkillVisibility.PUBLIC), eq(Set.of("SUPER_ADMIN")), eq(false));
+            eq(SkillVisibility.PUBLIC), eq(Set.of("SUPER_ADMIN")), eq(false),
+            eq(Attribution.EMPTY));
     }
 
     @Test
@@ -198,7 +202,8 @@ class SkillPublishControllerTest {
         given(skillPublishService.publishFromEntries(
             eq("global"), ArgumentMatchers.<List<PackageEntry>>any(),
             eq("usr_1"), eq(SkillVisibility.PUBLIC),
-            eq(Set.of("SUPER_ADMIN")), eq(true)))
+            eq(Set.of("SUPER_ADMIN")), eq(true),
+            eq(Attribution.EMPTY)))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(

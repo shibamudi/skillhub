@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams, useNavigate, useRouterState, useSearch } from '@tanstack/react-router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, ArrowUpCircle, ChevronDown, ChevronUp, Clock, Folder, Globe, Lock, RefreshCw, ShieldCheck, Terminal, User, Users } from 'lucide-react'
+import { ArrowLeft, ArrowUpCircle, ChevronDown, ChevronUp, Clock, ExternalLink, Folder, Globe, Lock, PenTool, RefreshCw, ShieldCheck, Terminal, User, Users } from 'lucide-react'
 import { MarkdownRenderer } from '@/features/skill/markdown-renderer'
 import { resolvePackageRelativeLink } from '@/features/skill/package-relative-link'
 import { FileTree } from '@/features/skill/file-tree'
@@ -802,16 +802,43 @@ export function SkillDetailPage() {
             )}
           </div>
           <h1 className="text-balance text-4xl font-bold font-heading text-foreground">{skill.displayName}</h1>
-          {skill.ownerDisplayName && (
-            <div className="flex min-w-0">
+          <div className="flex min-w-0 flex-wrap gap-2">
+            {skill.ownerDisplayName && (
               <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-border/60 bg-background/85 px-3 py-1.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm">
                 <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-semibold uppercase tracking-[0.08em] text-primary">
                   <User className="h-3.5 w-3.5" aria-hidden="true" />
                 </span>
-                <span className="min-w-0 truncate">{t('skillDetail.authorLabel', { name: skill.ownerDisplayName })}</span>
+                <span className="min-w-0 truncate">{t('skillDetail.managerLabel', { name: skill.ownerDisplayName })}</span>
               </div>
-            </div>
-          )}
+            )}
+            {skill.authorName && (
+              <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-border/60 bg-background/85 px-3 py-1.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm">
+                <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-semibold uppercase tracking-[0.08em] text-emerald-700">
+                  <PenTool className="h-3.5 w-3.5" aria-hidden="true" />
+                </span>
+                <span className="min-w-0 truncate">{t('skillDetail.authorLabel', { name: skill.authorName })}</span>
+              </div>
+            )}
+            {(skill.sourcePlatform || skill.sourceUrl) && (
+              <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-border/60 bg-background/85 px-3 py-1.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm">
+                <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[11px] font-semibold uppercase tracking-[0.08em] text-blue-700">
+                  <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                </span>
+                {skill.sourceUrl ? (
+                  <a
+                    href={skill.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="min-w-0 truncate text-blue-600 hover:underline"
+                  >
+                    {skill.sourcePlatform || skill.sourceUrl}
+                  </a>
+                ) : (
+                  <span className="min-w-0 truncate">{skill.sourcePlatform}</span>
+                )}
+              </div>
+            )}
+          </div>
           {skill.summary && (
             <p className="text-lg text-muted-foreground leading-relaxed">{skill.summary}</p>
           )}

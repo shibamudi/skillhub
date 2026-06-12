@@ -44,12 +44,23 @@ async function getSkillDocumentation(namespace: string, slug: string, version: s
   return fetchText(`${WEB_API_PREFIX}/skills/${cleanNamespace}/${encodeURIComponent(slug)}/versions/${encodeURIComponent(version)}/file?path=${encodeURIComponent(path)}`)
 }
 
-async function publishSkill(params: { namespace: string; file: File; visibility: string; confirmWarnings?: boolean }): Promise<PublishResult> {
+async function publishSkill(params: {
+  namespace: string
+  file: File
+  visibility: string
+  confirmWarnings?: boolean
+  authorName?: string
+  sourcePlatform?: string
+  sourceUrl?: string
+}): Promise<PublishResult> {
   const cleanNamespace = params.namespace.startsWith('@') ? params.namespace.slice(1) : params.namespace
   const formData = new FormData()
   formData.append('file', params.file)
   formData.append('visibility', params.visibility)
   formData.append('confirmWarnings', String(params.confirmWarnings === true))
+  if (params.authorName) formData.append('authorName', params.authorName)
+  if (params.sourcePlatform) formData.append('sourcePlatform', params.sourcePlatform)
+  if (params.sourceUrl) formData.append('sourceUrl', params.sourceUrl)
 
   return fetchJson<PublishResult>(`${WEB_API_PREFIX}/skills/${cleanNamespace}/publish`, {
     method: 'POST',
