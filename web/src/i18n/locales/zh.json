@@ -228,7 +228,8 @@
     "agreementPrefix": "登录即表示你同意我们的",
     "terms": "服务条款",
     "and": "和",
-    "privacy": "隐私政策"
+    "privacy": "隐私政策",
+    "trustedHeaderWaiting": "正在认证..."
   },
   "register": {
     "title": "创建账号",

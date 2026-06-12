@@ -66,6 +66,7 @@ export function ProfileSettingsPage() {
   }
 
   const hasEditableFields = Object.values(fieldPolicies).some((p) => p.editable)
+  const isTrustedHeaderAuth = user?.oauthProvider === 'trusted-header'
 
   function handleEdit() {
     const values: Record<string, string> = {}
@@ -196,6 +197,13 @@ export function ProfileSettingsPage() {
           ) : null}
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Read-only banner for external auth */}
+          {!hasEditableFields && isTrustedHeaderAuth ? (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-400">
+              {t('profile.trustedHeaderReadOnly')}
+            </div>
+          ) : null}
+
           {/* Avatar (read-only) */}
           {effectiveAvatarUrl ? (
             <div className="flex items-center gap-4">

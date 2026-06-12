@@ -100,6 +100,13 @@ skillhub:
       enabled: ${SKILLHUB_AUTH_DIRECT_ENABLED:false}
     session-bootstrap:
       enabled: ${SKILLHUB_AUTH_SESSION_BOOTSTRAP_ENABLED:false}
+    trusted-header:
+      enabled: ${SKILLHUB_AUTH_TRUSTED_HEADER_ENABLED:false}
+      user-id-header: ${SKILLHUB_AUTH_TRUSTED_HEADER_USER_ID_HEADER:X-Forwarded-User}
+      email-header: ${SKILLHUB_AUTH_TRUSTED_HEADER_EMAIL_HEADER:X-Forwarded-Email}
+      display-name-header: ${SKILLHUB_AUTH_TRUSTED_HEADER_DISPLAY_NAME_HEADER:X-Forwarded-Name}
+      auto-provision: ${SKILLHUB_AUTH_TRUSTED_HEADER_AUTO_PROVISION:true}
+      logout-url: ${SKILLHUB_AUTH_TRUSTED_HEADER_LOGOUT_URL:}
     password-reset:
       code-expiry: ${SKILLHUB_AUTH_PASSWORD_RESET_CODE_EXPIRY:PT10M}
       email-from-address: ${SKILLHUB_AUTH_PASSWORD_RESET_FROM_ADDRESS:noreply@skillhub.local}

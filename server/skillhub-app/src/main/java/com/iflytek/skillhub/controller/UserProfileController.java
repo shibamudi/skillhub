@@ -95,9 +95,13 @@ public class UserProfileController extends BaseApiController {
         }
 
         // Build field policies for the frontend
+        // If authenticated via trusted-header, all fields are read-only
+        boolean isTrustedHeaderAuth = "trusted-header".equals(principal.oauthProvider());
         Map<String, FieldPolicyResponse> fieldPolicies = new LinkedHashMap<>();
-        fieldPolicyConfig.fieldPolicies().forEach((field, policy) ->
-                fieldPolicies.put(field, new FieldPolicyResponse(policy.editable(), policy.requiresReview())));
+        fieldPolicyConfig.fieldPolicies().forEach((field, policy) -> {
+            boolean editable = isTrustedHeaderAuth ? false : policy.editable();
+            fieldPolicies.put(field, new FieldPolicyResponse(editable, policy.requiresReview()));
+        });
 
         var response = new UserProfileResponse(
                 displayName,
@@ -122,6 +126,11 @@ public class UserProfileController extends BaseApiController {
             @Valid @RequestBody UpdateProfileRequest request,
             HttpServletRequest httpRequest) {
         requireAuth(principal);
+
+        // Block profile editing for trusted-header auth users (server-side enforcement)
+        if ("trusted-header".equals(principal.oauthProvider())) {
+            throw new UnsupportedOperationException("error.profile.trustedHeaderReadOnly");
+        }
 
         // Ensure at least one field is provided
         if (!request.hasChanges()) {

@@ -92,4 +92,30 @@ class GlobalExceptionHandlerTest {
         assertThatThrownBy(() -> handler.handleSessionInvalidated(ex, request))
                 .isSameAs(ex);
     }
+
+    @Test
+    void handleUnsupportedOperation_shouldReturn403WithMessageCode() {
+        when(request.getMethod()).thenReturn("PATCH");
+        when(sensitiveLogSanitizer.sanitizeRequestTarget(request)).thenReturn("/api/v1/user/profile");
+
+        UnsupportedOperationException ex = new UnsupportedOperationException("error.profile.trustedHeaderReadOnly");
+        ResponseEntity<ApiResponse<Void>> response = handler.handleUnsupportedOperation(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().code()).isEqualTo(403);
+    }
+
+    @Test
+    void handleUnsupportedOperation_shouldReturnDefaultCodeWhenMessageIsBlank() {
+        when(request.getMethod()).thenReturn("PATCH");
+        when(sensitiveLogSanitizer.sanitizeRequestTarget(request)).thenReturn("/api/v1/user/profile");
+
+        UnsupportedOperationException ex = new UnsupportedOperationException();
+        ResponseEntity<ApiResponse<Void>> response = handler.handleUnsupportedOperation(ex, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().code()).isEqualTo(403);
+    }
 }

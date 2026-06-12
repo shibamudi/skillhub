@@ -81,6 +81,17 @@ public class GlobalExceptionHandler {
                 apiResponseFactory.error(400, "error.badRequest"));
     }
 
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnsupportedOperation(UnsupportedOperationException ex, HttpServletRequest request) {
+        String messageCode = ex.getMessage();
+        if (messageCode == null || messageCode.isBlank()) {
+            messageCode = "error.notSupported";
+        }
+        logHandledException(HttpStatus.FORBIDDEN, messageCode, request);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                apiResponseFactory.error(403, messageCode));
+    }
+
     @ExceptionHandler(SecurityException.class)
     public ResponseEntity<ApiResponse<Void>> handleForbidden(SecurityException ex, HttpServletRequest request) {
         logHandledException(HttpStatus.FORBIDDEN, "error.forbidden", request);

@@ -228,7 +228,8 @@
     "agreementPrefix": "By logging in, you agree to our",
     "terms": "Terms of Service",
     "and": "and",
-    "privacy": "Privacy Policy"
+    "privacy": "Privacy Policy",
+    "trustedHeaderWaiting": "Authenticating..."
   },
   "register": {
     "title": "Create Account",
@@ -729,7 +730,8 @@
     "partiallyAppliedTitle": "Partially Applied",
     "partiallyAppliedDescription": "Some changes were applied immediately. Others are pending admin review.",
     "noChanges": "No changes to save.",
-    "userId": "User ID"
+    "userId": "User ID",
+    "trustedHeaderReadOnly": "Your information is synced from an external authentication system and cannot be edited here."
   },
   "security": {
     "title": "Security Settings",
