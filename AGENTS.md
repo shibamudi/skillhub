@@ -246,6 +246,35 @@ make staging            # Full staging regression + smoke test
 - **Domain Exceptions** use `LocalizedDomainException` for user-facing messages with i18n keys.
 - **Package-info files** (`package-info.java`) should exist for all packages.
 
+## Branching Strategy
+
+This repository is a fork of `iflytek/skillhub`. To maintain upstream sync capability:
+
+| Branch | Purpose | Rules |
+|--------|---------|-------|
+| `main` | Mirror of upstream `iflytek/skillhub` | **Never commit directly**. Only sync from upstream via `git merge upstream/main`. |
+| `dev` | Integration branch for custom features | Merge target for all feature branches. Created from `main`. |
+| `feature/*` | Individual feature development | Branch from `dev`, merge back to `dev` with `--no-ff`. |
+
+### Upstream Sync Flow
+
+```bash
+git fetch upstream
+git checkout main
+git merge upstream/main          # main stays in sync with upstream
+git checkout dev
+git merge main                   # bring upstream updates into dev
+```
+
+### Feature Integration Flow
+
+```bash
+git checkout dev
+git merge --no-ff feature/xxx -m "merge(scope): description"
+```
+
+**Why `--no-ff`**: Preserves feature branch history and creates clear merge commits for traceability.
+
 ## Development Workflow
 
 ### Build & Start
