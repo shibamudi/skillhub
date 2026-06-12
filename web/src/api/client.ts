@@ -63,6 +63,8 @@ type RuntimeConfig = {
   authSessionBootstrapEnabled?: string
   authSessionBootstrapProvider?: string
   authSessionBootstrapAuto?: string
+  authTrustedHeaderEnabled?: string
+  authTrustedHeaderLogoutUrl?: string
 }
 
 declare global {
@@ -160,6 +162,20 @@ export function getSessionBootstrapRuntimeConfig(): SessionBootstrapRuntimeConfi
     enabled: parseBooleanFlag(config.authSessionBootstrapEnabled) && !!provider,
     provider: provider || undefined,
     auto: parseBooleanFlag(config.authSessionBootstrapAuto),
+  }
+}
+
+export type TrustedHeaderAuthRuntimeConfig = {
+  enabled: boolean
+  logoutUrl?: string
+}
+
+export function getTrustedHeaderAuthRuntimeConfig(): TrustedHeaderAuthRuntimeConfig {
+  const config = getRuntimeConfig()
+  const logoutUrl = config.authTrustedHeaderLogoutUrl
+  return {
+    enabled: parseBooleanFlag(config.authTrustedHeaderEnabled),
+    logoutUrl: logoutUrl || undefined,
   }
 }
 

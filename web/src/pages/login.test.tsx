@@ -24,6 +24,12 @@ vi.mock('lucide-react', () => ({
 
 vi.mock('@/api/client', () => ({
   getDirectAuthRuntimeConfig: () => ({ enabled: false }),
+  getTrustedHeaderAuthRuntimeConfig: () => ({ enabled: false }),
+  authApi: { getMe: vi.fn().mockResolvedValue(null) },
+}))
+
+vi.mock('@/features/auth/use-auth', () => ({
+  useAuth: () => ({ user: null, isLoading: false, isAuthenticated: false }),
 }))
 
 vi.mock('@/features/auth/login-button', () => ({

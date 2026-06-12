@@ -2,9 +2,10 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Eye, EyeOff } from 'lucide-react'
-import { getDirectAuthRuntimeConfig } from '@/api/client'
+import { getDirectAuthRuntimeConfig, getTrustedHeaderAuthRuntimeConfig } from '@/api/client'
 import { LoginButton } from '@/features/auth/login-button'
 import { SessionBootstrapEntry } from '@/features/auth/session-bootstrap-entry'
+import { useAuth } from '@/features/auth/use-auth'
 import { useAuthMethods } from '@/features/auth/use-auth-methods'
 import { usePasswordLogin } from '@/features/auth/use-password-login'
 import { Button } from '@/shared/ui/button'
@@ -23,14 +24,40 @@ export function LoginPage() {
   const search = useSearch({ from: '/login' })
   const loginMutation = usePasswordLogin()
   const directAuthConfig = getDirectAuthRuntimeConfig()
+  const trustedHeaderConfig = getTrustedHeaderAuthRuntimeConfig()
+  const { user: authUser } = useAuth(trustedHeaderConfig.enabled)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<{ username?: string, password?: string }>({})
   const isChinese = i18n.resolvedLanguage?.split('-')[0] === 'zh'
-  const { data: authMethods } = useAuthMethods(search.returnTo)
+  const { data: authMethods } = useAuthMethods(
+    trustedHeaderConfig.enabled ? undefined : search.returnTo,
+    !trustedHeaderConfig.enabled,
+  )
 
   const returnTo = search.returnTo && search.returnTo.startsWith('/') ? search.returnTo : '/dashboard'
+
+  // TrustedHeader mode: if authenticated, redirect immediately
+  if (trustedHeaderConfig.enabled && authUser) {
+    window.location.href = returnTo
+    return null
+  }
+
+  // TrustedHeader mode: show waiting message (Traefik handles auth redirect)
+  if (trustedHeaderConfig.enabled) {
+    return (
+      <div className="flex min-h-[70vh] items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/70 items-center justify-center shadow-glow mb-4">
+            <span className="text-primary-foreground font-bold text-2xl">S</span>
+          </div>
+          <p className="text-muted-foreground text-lg">{t('login.trustedHeaderWaiting')}</p>
+        </div>
+      </div>
+    )
+  }
+
   const disabledMessage = search.reason === 'accountDisabled' ? t('apiError.auth.accountDisabled') : null
   const directMethod = directAuthConfig.provider
     ? authMethods?.find((method) =>

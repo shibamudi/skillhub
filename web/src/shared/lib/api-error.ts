@@ -1,4 +1,5 @@
 import i18n from '@/i18n/config'
+import { getTrustedHeaderAuthRuntimeConfig } from '@/api/client'
 import { toast } from './toast'
 
 const ACCOUNT_DISABLED_REASON = 'accountDisabled'
@@ -60,6 +61,13 @@ export function handleApiError(error: unknown): void {
   if (status === 401) {
     if (isAccountDisabledError(error)) {
       window.location.href = `/login?reason=${ACCOUNT_DISABLED_REASON}`
+      return
+    }
+    // Trusted header auth mode: redirect to home instead of login page
+    // (Traefik handles authentication redirect)
+    const trustedHeaderConfig = getTrustedHeaderAuthRuntimeConfig()
+    if (trustedHeaderConfig.enabled) {
+      window.location.href = '/'
       return
     }
     toast.error(i18n.t('apiError.unauthorized'))

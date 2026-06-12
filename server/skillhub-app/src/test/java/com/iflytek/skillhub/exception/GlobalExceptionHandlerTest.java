@@ -92,4 +92,5 @@ class GlobalExceptionHandlerTest {
         assertThatThrownBy(() -> handler.handleSessionInvalidated(ex, request))
                 .isSameAs(ex);
     }
+
 }

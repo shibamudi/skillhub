@@ -5,9 +5,10 @@ import type { AuthMethod } from '@/api/types'
 /**
  * Loads the backend-advertised authentication methods for the current entry point.
  */
-export function useAuthMethods(returnTo?: string) {
+export function useAuthMethods(returnTo?: string, enabled = true) {
   return useQuery<AuthMethod[]>({
     queryKey: ['auth', 'methods', returnTo ?? ''],
     queryFn: () => authApi.getMethods(returnTo),
+    enabled,
   })
 }

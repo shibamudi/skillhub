@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { authApi } from '@/api/client'
+import { authApi, getTrustedHeaderAuthRuntimeConfig } from '@/api/client'
 import { useMyNamespaces } from '@/shared/hooks/use-namespace-queries'
 import { buildGlobalReviewsPath, canAccessReviewCenter } from '@/features/review/review-paths'
 import { clearSessionScopedQueries } from '@/features/notification/notification-session'
@@ -72,6 +72,15 @@ export function UserMenu({ user, triggerClassName }: UserMenuProps) {
   }, [])
 
   const handleLogout = async () => {
+    // Trusted header auth mode: redirect to external logout URL (read from runtime config)
+    if (user.oauthProvider === 'trusted-header') {
+      const trustedHeaderConfig = getTrustedHeaderAuthRuntimeConfig()
+      clearSessionScopedQueries(queryClient)
+      queryClient.setQueryData(['auth', 'me'], null)
+      window.location.href = trustedHeaderConfig.logoutUrl || '/'
+      return
+    }
+
     try {
       await authApi.logout()
     } catch (error) {
