@@ -7,8 +7,10 @@ Thumbs.db
 .codex/
 .idea/
 .omc
+.omo/
 .vscode/
 .classpath
+.factorypath
 .project
 .settings/
 *.iml

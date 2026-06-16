@@ -1,13 +1,17 @@
 package com.iflytek.skillhub.auth.trusted;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * Configuration properties for trusted header authentication.
  *
  * <p>When enabled, the system trusts user identity information from HTTP headers
- * set by a reverse proxy (e.g., Traefik ForwardAuth).
+ * set by a trusted reverse proxy (e.g., Traefik ForwardAuth).
  */
+@Component
+@ConditionalOnProperty(name = "skillhub.auth.trusted-header.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "skillhub.auth.trusted-header")
 public class TrustedHeaderAuthProperties {
 

@@ -1,10 +1,7 @@
 package com.iflytek.skillhub.auth.trusted;
 
-import com.iflytek.skillhub.auth.entity.Role;
-import com.iflytek.skillhub.auth.entity.UserRoleBinding;
 import com.iflytek.skillhub.auth.rbac.PlatformPrincipal;
 import com.iflytek.skillhub.auth.rbac.PlatformRoleDefaults;
-import com.iflytek.skillhub.auth.repository.RoleRepository;
 import com.iflytek.skillhub.auth.repository.UserRoleBindingRepository;
 import com.iflytek.skillhub.domain.namespace.Namespace;
 import com.iflytek.skillhub.domain.namespace.NamespaceMember;
@@ -50,7 +47,6 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
 
     private final TrustedHeaderAuthProperties properties;
     private final UserAccountRepository userAccountRepository;
-    private final RoleRepository roleRepository;
     private final UserRoleBindingRepository userRoleBindingRepository;
     private final NamespaceRepository namespaceRepository;
     private final NamespaceMemberRepository namespaceMemberRepository;
@@ -58,14 +54,12 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
 
     public TrustedHeaderAuthFilter(TrustedHeaderAuthProperties properties,
                                    UserAccountRepository userAccountRepository,
-                                   RoleRepository roleRepository,
                                    UserRoleBindingRepository userRoleBindingRepository,
                                    NamespaceRepository namespaceRepository,
                                    NamespaceMemberRepository namespaceMemberRepository,
                                    TransactionTemplate transactionTemplate) {
         this.properties = properties;
         this.userAccountRepository = userAccountRepository;
-        this.roleRepository = roleRepository;
         this.userRoleBindingRepository = userRoleBindingRepository;
         this.namespaceRepository = namespaceRepository;
         this.namespaceMemberRepository = namespaceMemberRepository;
@@ -161,11 +155,6 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
             // Create user account
             UserAccount user = new UserAccount(userId, finalDisplayName, finalEmail, null);
             user = userAccountRepository.save(user);
-
-            // Assign default USER role
-            Role defaultRole = roleRepository.findByCode("USER")
-                    .orElseThrow(() -> new IllegalStateException("Missing built-in role: USER"));
-            userRoleBindingRepository.save(new UserRoleBinding(userId, defaultRole));
 
             // Add to global namespace
             Namespace globalNs = namespaceRepository.findBySlug("global")
