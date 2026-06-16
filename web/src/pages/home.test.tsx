@@ -29,10 +29,6 @@ vi.mock('@/shared/components/skeleton-loader', () => ({
   SkeletonList: () => null,
 }))
 
-vi.mock('@/shared/components/quick-start', () => ({
-  QuickStartSection: () => null,
-}))
-
 vi.mock('@/shared/hooks/use-skill-queries', () => ({
   useSearchSkills: () => ({
     data: { items: [] },
@@ -59,7 +55,7 @@ describe('HomePage', () => {
   it('renders the hero section with brand name', () => {
     const html = renderToStaticMarkup(<HomePage />)
 
-    expect(html).toContain('SkillHub')
+    expect(html).toContain('智创技能广场')
     expect(html).toContain('home.subtitle')
   })
 })

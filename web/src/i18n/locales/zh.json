@@ -13,89 +13,11 @@
   "landing": {
     "hero": {
       "title": "发现与分享 AI 技能",
-      "subtitle": "使用社区驱动的技能构建强大的 AI 代理",
+      "subtitle": "发现、分享与管理 AI 技能",
       "searchPlaceholder": "搜索技能...",
       "exploreSkills": "探索技能",
       "publishSkill": "发布技能"
     },
-    "features": {
-      "secure": {
-        "title": "安全私密",
-        "description": "企业级安全保护您的 AI 工作流"
-      },
-      "community": {
-        "title": "社区驱动",
-        "description": "与全球开发者分享和发现技能"
-      },
-      "integration": {
-        "title": "轻松集成",
-        "description": "无缝集成到您现有的工具中"
-      },
-      "versionControl": {
-        "title": "版本控制",
-        "description": "完善的版本管理和发布流程，确保技能包的质量和可追溯性。"
-      },
-      "cli": {
-        "title": "CLI 工具",
-        "description": "强大的命令行工具，支持快速发布、安装和管理技能包。"
-      },
-      "governance": {
-        "title": "审核治理",
-        "description": "内置审核流程和权限管理，保障企业级技能质量。"
-      }
-    },
-    "stats": {
-      "skills": "项目库",
-      "downloads": "下载量",
-      "teams": "团队"
-    },
-    "whySkillHub": {
-      "title": "为什么选择 SkillHub",
-      "subtitle": "专为企业打造的私有化 Agent 技能管理平台"
-    },
-    "badge": "企业级技能注册中心",
-    "tagline": "发布、发现、管理",
-    "taglineHighlight": " Agent 技能包",
-    "description": "自托管的私有技能注册平台，为团队提供安全、高效的技能共享与协作空间",
-    "publishSkill": "发布技能",
-    "statsSkills": "技能包",
-    "statsDownloads": "下载量",
-    "statsTeams": "团队",
-    "whyTitle": "为什么选择",
-    "whyDescription": "专为企业打造的技能管理平台，提供完整的发布、发现、治理能力",
-    "featuresList": {
-      "privateDeploy": {
-        "title": "私有部署",
-        "description": "完全自托管，数据主权在您手中。一键部署到您的基础设施，防火墙后安全运行。"
-      },
-      "versionControl": {
-        "title": "版本管理",
-        "description": "语义化版本控制，自定义标签（beta、stable），自动追踪 latest 版本。"
-      },
-      "smartSearch": {
-        "title": "智能搜索",
-        "description": "全文搜索，支持命名空间、下载量、评分、时间等多维度筛选。"
-      },
-      "teamwork": {
-        "title": "团队协作",
-        "description": "命名空间管理，角色权限控制（Owner/Admin/Member），发布策略配置。"
-      },
-      "governance": {
-        "title": "审核治理",
-        "description": "团队内审核，平台级审批，全流程审计日志，满足合规要求。"
-      },
-      "cliFirst": {
-        "title": "CLI 优先",
-        "description": "原生 REST API，兼容现有 ClawHub CLI 工具，无需客户端改动。"
-      }
-    },
-    "ctaTitle": "准备好开始了吗？",
-    "ctaDescription": "一条命令即可启动本地开发环境，体验完整的技能管理流程",
-    "ctaButton": "立即体验",
-    "footerLicense": "© 2026 SkillHub。Apache License 2.0。",
-    "footerDocs": "文档",
-    "footerGithub": "GitHub",
-    "footerCommunity": "社区",
     "quickStart": {
       "title": "快速开始",
       "subtitle": "Quick Start",
@@ -107,13 +29,13 @@
         "cli": "CLI"
       },
       "cli": {
-        "description": "安装 SkillHub CLI 到本地，后续可运行 skillhub install 安装技能",
+        "description": "安装智创技能广场 CLI 到本地，后续可运行 skillhub install 安装技能",
         "command": "npm i -g @astron-team/skillhub"
       },
       "agent": {
-        "description": "发送提示词给你的 Agent，以设置SkillHub Registry",
-        "command": "阅读 https://www.example.com/registry/skill.md，并按照说明完成 SkillHub Skills Registry 的配置",
-        "commandTemplate": "阅读 {{url}}，并按照说明完成 SkillHub Skills Registry 的配置"
+        "description": "发送提示词给你的 Agent，以设置智创技能广场 Registry",
+        "command": "阅读 https://www.example.com/registry/skill.md，并按照说明完成智创技能广场 Registry 的配置",
+        "commandTemplate": "阅读 {{url}}，并按照说明完成智创技能广场 Registry 的配置"
       },
       "human": {
         "description": "使用CLI工具安装Skills",
@@ -122,7 +44,7 @@
       "steps": {
         "configureEnv": {
           "title": "1. 配置环境变量",
-          "description": "设置 ClawHub CLI 连接到 SkillHub"
+          "description": "设置 ClawHub CLI 连接到智创技能广场"
         },
         "installSkills": {
           "title": "2. 安装技能",
@@ -143,19 +65,19 @@
     "browseSkills": "浏览技能",
     "publishSkill": "发布技能",
     "popularTitle": "热门下载",
-    "popularDescription": "社区最受欢迎的技能",
+    "popularDescription": "最受欢迎的技能",
     "latestTitle": "最新发布",
     "latestDescription": "刚刚发布的新技能",
     "viewAll": "查看全部 →",
     "quickStart": {
       "title": "快速开始",
       "subtitle": "Quick Start",
-      "description": "只需几个简单步骤，即可开始使用 SkillHub",
+      "description": "只需几个简单步骤，即可开始使用智创技能广场",
       "tip": "💡 提示：访问技能详情页可获取带环境变量的一键复制安装命令",
       "steps": {
         "configureEnv": {
           "title": "1. 配置环境变量",
-          "description": "设置 ClawHub CLI 连接到 SkillHub"
+          "description": "设置 ClawHub CLI 连接到智创技能广场"
         },
         "installSkills": {
           "title": "2. 安装技能",
@@ -201,7 +123,7 @@
     "clear": "清空搜索"
   },
   "login": {
-    "title": "登录 SkillHub",
+    "title": "登录智创技能广场",
     "subtitle": "选择一个方式登录以继续",
     "tabPassword": "账号密码",
     "tabOAuth": "OAuth",
@@ -221,7 +143,7 @@
     "oauthHint": "使用 OAuth 登录时，认证完成后会自动返回当前站点。",
     "passwordCompatHint": "当前部署已启用账号密码兼容接入层。表单将路由到 {{name}}，而不是固定使用本地账号接口。",
     "enterpriseSsoTitle": "企业单点登录",
-    "enterpriseSsoHint": "当前部署已启用兼容接入层。若浏览器中已存在 {{name}} 会话，可直接尝试建立 SkillHub 登录态。",
+    "enterpriseSsoHint": "当前部署已启用兼容接入层。若浏览器中已存在 {{name}} 会话，可直接尝试建立智创技能广场登录态。",
     "enterpriseSsoAutoHint": "当前部署已启用自动 {{name}} 探测。若未成功，你仍可继续使用现有登录方式。",
     "enterpriseSsoAction": "尝试 {{name}} 登录",
     "enterpriseSsoSubmitting": "正在尝试 {{name}} 登录...",
@@ -815,7 +737,7 @@
     "loginToRate": "登录后可以收藏和评分",
     "install": "安装",
     "installMethodClawhub": "ClawHub CLI",
-    "installMethodSkillhub": "SkillHub CLI",
+    "installMethodSkillhub": "智创技能广场 CLI",
     "download": "下载",
     "labelsSectionTitle": "标签管理",
     "labelsSectionDescription": "为这个技能挂载或移除推荐标签，帮助用户筛选和发现。",
@@ -1192,7 +1114,7 @@
     "formatHint": "仅支持 .zip 格式"
   },
   "layout": {
-    "footerDescription": "技能注册中心，为开发者提供高效的技能管理和分发平台。"
+    "footerDescription": "山东大学 AI 技能管理与分发平台"
   },
   "nsReviews": {
     "title": "命名空间审核",
@@ -1318,17 +1240,13 @@
     }
   },
   "footer": {
-    "resources": "资源",
-    "docs": "文档",
-    "api": "API",
-    "community": "社区",
     "privacy": "隐私政策",
     "terms": "服务条款",
-    "copyright": "© 2026 SkillHub. 保留所有权利。"
+    "copyright": "© 山东大学 智创技能广场"
   },
   "publish": {
     "title": "发布技能",
-    "subtitle": "上传技能包到 SkillHub",
+    "subtitle": "上传技能包到智创技能广场",
     "reviewNotice": {
       "title": "发布审核说明",
       "description": "技能包提交后需要经过管理员审核才能正式发布。"

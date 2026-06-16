@@ -5,6 +5,7 @@ import { useAuth } from '@/features/auth/use-auth'
 import { LanguageSwitcher } from '@/shared/components/language-switcher'
 import { UserMenu } from '@/shared/components/user-menu'
 import { NotificationBell } from '@/features/notification/notification-bell'
+import { SDULogo } from '@/shared/components/sdu-logo'
 import { getAppHeaderClassName } from './layout-header-style'
 import { getAppMainContentLayout, resolveAppMainContentPathname } from './layout-main-content'
 
@@ -72,11 +73,15 @@ export function Layout() {
 
       {/* Header */}
       <header className={getAppHeaderClassName(isHeaderElevated)} style={{ borderColor: 'hsl(var(--border))' }}>
-        <Link to="/" className="text-xl font-semibold tracking-tight text-brand-gradient">
-          SkillHub
+        <Link to="/" className="flex items-center gap-3 flex-shrink-0">
+          <SDULogo height={32} />
+          <span className="h-5 w-px bg-gray-300" />
+          <span className="text-xl font-semibold tracking-tight text-brand-gradient whitespace-nowrap">
+            智创技能广场
+          </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 text-[15px] font-normal" style={{ color: 'hsl(var(--text-secondary))' }}>
+        <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 text-[15px] font-normal" style={{ color: 'hsl(var(--text-secondary))' }}>
           {navItems.map((item) => {
             if (item.auth && !user) return null
             const active = isActive(item.to, item.exact)
@@ -136,11 +141,10 @@ export function Layout() {
         <div className="max-w-6xl mx-auto px-6 md:px-12 py-10">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 md:gap-12">
             <div className="flex-shrink-0">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold shadow-sm bg-brand-gradient">
-                  S
-                </div>
-                <span className="text-lg font-bold text-brand-gradient">SkillHub</span>
+              <div className="flex items-center gap-3 mb-3">
+                <SDULogo height={26} />
+                <span className="h-4 w-px bg-gray-300" />
+                <span className="text-lg font-bold text-brand-gradient whitespace-nowrap">智创技能广场</span>
               </div>
               <p className="text-sm max-w-xs" style={{ color: 'hsl(var(--text-secondary))' }}>
                 {t('layout.footerDescription')}
@@ -174,43 +178,7 @@ export function Layout() {
                   </li>
                 </ul>
               </div>
-              <div>
-                <h4 className="text-sm font-semibold mb-3" style={{ color: 'hsl(var(--foreground))' }}>
-                  {t('footer.resources')}
-                </h4>
-                <ul className="space-y-2 text-sm">
-                  <li>
-                    <a href="#" className="hover:opacity-80 transition-opacity" style={{ color: 'hsl(var(--text-secondary))' }}>
-                      {t('footer.docs')}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:opacity-80 transition-opacity" style={{ color: 'hsl(var(--text-secondary))' }}>
-                      {t('footer.api')}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="hover:opacity-80 transition-opacity" style={{ color: 'hsl(var(--text-secondary))' }}>
-                      {t('footer.community')}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div
-            className="mt-10 pt-6 border-t flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs"
-            style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--muted-foreground))' }}
-          >
-            <span>{t('footer.copyright')}</span>
-            <div className="flex items-center gap-2">
-              <Link to="/privacy" className="hover:opacity-80 transition-opacity">
-                {t('footer.privacy')}
-              </Link>
-              <span>|</span>
-              <Link to="/terms" className="hover:opacity-80 transition-opacity">
-                {t('footer.terms')}
-              </Link>
+
             </div>
           </div>
         </div>

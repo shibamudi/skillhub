@@ -25,7 +25,7 @@ test.describe('Landing Quick Start CLI Tab (Real API)', () => {
     await expect(humanTab).toHaveAttribute('aria-pressed', 'false')
 
     await expect(
-      page.getByText('Install the SkillHub CLI locally to run skillhub install for skills.'),
+      page.getByText('Install the 智创技能广场 CLI locally to run skillhub install for skills.'),
     ).toBeVisible()
     await expect(page.getByText('npm i -g @astron-team/skillhub', { exact: true })).toBeVisible()
   })

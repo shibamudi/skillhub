@@ -53,11 +53,11 @@ test.describe('Public Skill Detail Anonymous Access (Real API)', () => {
 
     await expect(page.getByRole('tab', { name: 'ClawHub CLI' })).toHaveAttribute('aria-selected', 'true')
     await expect(page.getByText(new RegExp(`npx clawhub install ${escapeRegExp(clawhubTarget)} --registry`))).toBeVisible()
-    await expect(page.getByRole('tab', { name: 'SkillHub CLI' })).toBeVisible()
+    await expect(page.getByRole('tab', { name: '智创技能广场 CLI' })).toBeVisible()
 
-    await page.getByRole('tab', { name: 'SkillHub CLI' }).click()
+    await page.getByRole('tab', { name: '智创技能广场 CLI' }).click()
 
-    await expect(page.getByRole('tab', { name: 'SkillHub CLI' })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('tab', { name: '智创技能广场 CLI' })).toHaveAttribute('aria-selected', 'true')
     await expect(page.getByText(new RegExp(`npx @astron-team/skillhub@latest install ${escapeRegExp(current.skill.slug)}${escapeRegExp(skillhubNamespace)} --registry`))).toBeVisible()
     await expect(page.getByRole('button', { name: 'Copy' }).first()).toBeVisible()
   })
