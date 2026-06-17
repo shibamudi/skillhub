@@ -1,5 +1,6 @@
 FROM node:22-alpine AS build
 ARG VITE_BASE_PATH=/
+ENV COREPACK_NPM_REGISTRY=https://registry.npmmirror.com
 RUN corepack enable
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
