@@ -13,7 +13,7 @@ function OAuthIcon({ provider }: { provider: string }) {
   const normalizedProvider = provider.toLowerCase()
   return (
     <img
-      src={`/${normalizedProvider}-logo.svg`}
+      src={`${import.meta.env.BASE_URL}${normalizedProvider}-logo.svg`}
       alt={provider}
       className="w-5 h-5 mr-3"
     />

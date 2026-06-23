@@ -7,7 +7,7 @@ export function SDULogo({ className, height = 28 }: SDULogoProps) {
   const width = height * (91 / 28)
   return (
     <img
-      src="/sdu-logo.svg"
+      src={`${import.meta.env.BASE_URL}sdu-logo.svg`}
       alt="Shandong University"
       width={width}
       height={height}
