@@ -5,7 +5,9 @@
 #
 # Prerequisites:
 # 1. Traefik must be running and connected to the 'shared' network
-# 2. ForwardAuth middleware 'cas-auth' must be defined in Traefik config
+# 2. ForwardAuth middlewares must be defined in Traefik config:
+#    - cas-auth: CAS authentication (outputs X-User-Id)
+#    - user-info-optional: User info enrichment (outputs X-User-Name, etc.)
 # 3. Build web image with VITE_BASE_PATH matching TRAEFIK_PATH_PREFIX
 #
 # Usage:
@@ -69,7 +71,7 @@ services:
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-true}
       SKILLHUB_PUBLIC_BASE_URL: ${SKILLHUB_PUBLIC_BASE_URL}
       DEVICE_AUTH_VERIFICATION_URI: ${DEVICE_AUTH_VERIFICATION_URI:-}
-      SKILLHUB_STORAGE_PROVIDER: ${SKILLHUB_STORAGE_PROVIDER:-s3}
+      SKILLHUB_STORAGE_PROVIDER: ${SKILLHUB_STORAGE_PROVIDER:-local}
       STORAGE_BASE_PATH: /var/lib/skillhub/storage
       SKILLHUB_STORAGE_S3_ENDPOINT: ${SKILLHUB_STORAGE_S3_ENDPOINT:-}
       SKILLHUB_STORAGE_S3_PUBLIC_ENDPOINT: ${SKILLHUB_STORAGE_S3_PUBLIC_ENDPOINT:-}
@@ -136,7 +138,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.skillhub-web.rule=PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}`)
-      - traefik.http.routers.skillhub-web.middlewares=cas-auth,skillhub-strip
+      - traefik.http.routers.skillhub-web.middlewares=cas-auth,user-info-optional,skillhub-strip
       - traefik.http.middlewares.skillhub-strip.stripprefix.prefixes=${TRAEFIK_PATH_PREFIX:-/skillhub}
       - traefik.http.services.skillhub-web.loadbalancer.server.port=80
     networks:
