@@ -213,6 +213,22 @@ skillhub/
 - `document/docs/` — auto-generated user documentation (VitePress)
 - `server/skillhub-app/src/main/java/com/iflytek/skillhub/dto/` — some DTOs may be generated
 
+### Flyway Migration Versioning
+
+Upstream (`iflytek/skillhub` `main`) uses sequential version numbers: `V1`, `V2`, ..., `Vn`. To prevent version collisions when syncing main into dev, all dev-only migrations **must start from `V2001`**:
+
+| Version Range | Owner |
+|---------------|-------|
+| `V1` – `Vn` | upstream migrations (sync from `iflytek/skillhub` `main`) |
+| `V2001`, `V2002`, `V2003`, ... | dev-only migrations |
+
+**When merging upstream changes into dev and a version collision is found** (e.g., upstream adds `V43__xxx.sql` while dev also has a `V43`): rename the dev migration to the next available V2000+ number. Never renumber upstream migrations.
+
+**Production databases cannot be reset.** This convention is **mandatory** — using sequential V-numbers for dev-only migrations will permanently block production deployments once an upstream migration takes the same number.
+
+Current dev-only migrations:
+- `V2001__skill_author_attribution.sql` — skill author/source attribution columns
+
 ### After Making Changes
 
 **Backend changes:**

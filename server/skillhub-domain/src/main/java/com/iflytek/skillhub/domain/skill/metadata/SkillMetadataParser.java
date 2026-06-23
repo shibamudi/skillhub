@@ -50,6 +50,9 @@ public class SkillMetadataParser {
         String name = extractRequiredField(frontmatter, "name");
         String description = extractRequiredField(frontmatter, "description");
         String version = extractOptionalField(frontmatter, "version");
+        if (version == null) {
+            version = extractNestedOptionalField(frontmatter, "metadata", "version");
+        }
         Attribution attribution = new Attribution(
             extractOptionalField(frontmatter, "author"),
             extractOptionalField(frontmatter, "source_platform"),
@@ -125,6 +128,15 @@ public class SkillMetadataParser {
 
     private String extractOptionalField(Map<String, Object> frontmatter, String fieldName) {
         Object value = frontmatter.get(fieldName);
+        return value == null ? null : value.toString();
+    }
+
+    private String extractNestedOptionalField(Map<String, Object> frontmatter, String objectFieldName, String fieldName) {
+        Object nestedValue = frontmatter.get(objectFieldName);
+        if (!(nestedValue instanceof Map<?, ?> nestedMap)) {
+            return null;
+        }
+        Object value = nestedMap.get(fieldName);
         return value == null ? null : value.toString();
     }
 }
