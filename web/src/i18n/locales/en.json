@@ -153,6 +153,13 @@
     "privacy": "Privacy Policy",
     "trustedHeaderWaiting": "Authenticating..."
   },
+  "authMethod": {
+    "local": "Local Account",
+    "github": "GitHub",
+    "gitlab": "GitLab",
+    "trusted-header": "Unified Authentication",
+    "mock": "Development Mode"
+  },
   "register": {
     "title": "Create Account",
     "subtitle": "Register locally or sign in directly with OAuth.",

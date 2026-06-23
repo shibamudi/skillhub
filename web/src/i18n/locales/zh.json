@@ -153,6 +153,13 @@
     "privacy": "隐私政策",
     "trustedHeaderWaiting": "正在认证..."
   },
+  "authMethod": {
+    "local": "本地账号",
+    "github": "GitHub",
+    "gitlab": "GitLab",
+    "trusted-header": "统一认证",
+    "mock": "开发环境"
+  },
   "register": {
     "title": "创建账号",
     "subtitle": "支持本地注册，也可以直接使用 OAuth 登录进入平台。",

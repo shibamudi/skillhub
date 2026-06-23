@@ -185,9 +185,11 @@ export function ProfileSettingsPage() {
           </div>
           {!isEditing ? (
             <div className="flex items-center gap-2">
-              <Button type="button" variant="outline" size="sm" onClick={() => void navigate({ to: '/reset-password' })}>
-                {t('profile.resetPassword')}
-              </Button>
+              {!isTrustedHeaderAuth ? (
+                <Button type="button" variant="outline" size="sm" onClick={() => void navigate({ to: '/reset-password' })}>
+                  {t('profile.resetPassword')}
+                </Button>
+              ) : null}
               {hasEditableFields ? (
                 <Button type="button" variant="outline" size="sm" onClick={handleEdit}>
                   {t('profile.edit')}

@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/features/auth/use-auth'
 import type { SkillSummary } from '@/api/types'
@@ -11,6 +12,14 @@ import { APP_SHELL_PAGE_CLASS_NAME } from '@/app/page-shell-style'
 import { limitPreviewItems } from './dashboard-preview'
 
 const DASHBOARD_PREVIEW_LIMIT = 5
+
+function getAuthMethodLabel(provider: string | undefined, t: TFunction): string {
+  const key = `authMethod.${provider ?? 'local'}` as const
+  const fallback = provider
+    ? provider.charAt(0).toUpperCase() + provider.slice(1)
+    : 'Local'
+  return t(key, { defaultValue: fallback })
+}
 
 /**
  * Default dashboard landing page for authenticated users.
@@ -55,7 +64,7 @@ export function DashboardPage() {
               <div className="text-sm text-muted-foreground">{t('dashboard.userId')}: {user?.userId}</div>
               <div className="text-xs text-muted-foreground flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                {t('dashboard.loginVia', { provider: user?.oauthProvider })}
+                {t('dashboard.loginVia', { provider: getAuthMethodLabel(user?.oauthProvider, t) })}
               </div>
             </div>
           </div>
