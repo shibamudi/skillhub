@@ -591,8 +591,11 @@ public class SkillPublishService {
             skillRepository.flush();
         }
 
-        reviewTaskRepository.findBySkillVersionIdAndStatus(version.getId(), ReviewTaskStatus.PENDING)
-                .ifPresent(reviewTaskRepository::delete);
+        // Delete ALL review tasks associated with this version (PENDING, REJECTED, etc.).
+        // A REJECTED version leaves behind a REJECTED review_task row referencing this
+        // version; deleting the version without first removing that row violates the
+        // review_task.skill_version_id FK constraint.
+        reviewTaskRepository.deleteBySkillVersionIdIn(List.of(version.getId()));
 
         List<SkillFile> files = skillFileRepository.findByVersionId(version.getId());
         List<String> storageKeys = new ArrayList<>();
