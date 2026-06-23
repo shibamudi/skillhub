@@ -725,7 +725,7 @@
     "packageLinkMissingTitle": "文件未找到",
     "packageLinkMissingDescription": "该链接指向的文件不在当前技能版本中。",
     "authorLabel": "作者 {{name}}",
-    "managerLabel": "管理者 {{name}}",
+    
     "sourceLabel": "来源",
     "expandOverview": "展开全文",
     "collapseOverview": "收起内容",

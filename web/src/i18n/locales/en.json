@@ -725,7 +725,7 @@
     "packageLinkMissingTitle": "File not found",
     "packageLinkMissingDescription": "This link points to a file that is not included in the current skill version.",
     "authorLabel": "By {{name}}",
-    "managerLabel": "Managed by {{name}}",
+    
     "sourceLabel": "Source",
     "expandOverview": "Expand full overview",
     "collapseOverview": "Collapse content",
