@@ -4,6 +4,7 @@ import com.iflytek.skillhub.auth.entity.ApiToken;
 import com.iflytek.skillhub.auth.rbac.PlatformPrincipal;
 import com.iflytek.skillhub.auth.rbac.PlatformRoleDefaults;
 import com.iflytek.skillhub.auth.repository.UserRoleBindingRepository;
+import com.iflytek.skillhub.auth.util.RequestPathUtils;
 import com.iflytek.skillhub.domain.user.UserAccount;
 import com.iflytek.skillhub.domain.user.UserAccountRepository;
 import jakarta.servlet.FilterChain;
@@ -86,7 +87,7 @@ public class ApiTokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
+        String path = RequestPathUtils.getForwardedPath(request);
         return !(path.startsWith("/api/v1/")
             || path.startsWith("/api/web/")
             || path.startsWith("/api/cli/"));

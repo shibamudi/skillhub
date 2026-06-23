@@ -10,6 +10,7 @@ import com.iflytek.skillhub.auth.policy.RouteSecurityPolicyRegistry;
 import com.iflytek.skillhub.auth.token.ApiTokenAuthenticationFilter;
 import com.iflytek.skillhub.auth.trusted.TrustedHeaderAuthFilter;
 import com.iflytek.skillhub.auth.token.ApiTokenScopeFilter;
+import com.iflytek.skillhub.auth.util.RequestPathUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
@@ -105,7 +107,7 @@ public class SecurityConfig {
         var csrfHandler = new CsrfTokenRequestAttributeHandler();
         csrfHandler.setCsrfRequestAttributeName(null);
         RequestMatcher csrfIgnoreMatcher = request -> {
-            String path = request.getRequestURI();
+            String path = RequestPathUtils.getForwardedPath(request);
             String authorization = request.getHeader("Authorization");
             return routeSecurityPolicyRegistry.shouldIgnoreCsrf(path, authorization);
         };
@@ -161,14 +163,19 @@ public class SecurityConfig {
             .addFilterBefore(apiTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterAfter(apiTokenScopeFilter, ApiTokenAuthenticationFilter.class);
 
+        // Stateful auth filters (mock / trusted-header) MUST run before
+        // SessionManagementFilter so that authentication is already established
+        // when session validation occurs. Otherwise a stale/invalid SESSION
+        // cookie triggers an immediate 401 before these filters get a chance
+        // to authenticate from headers.
         MockAuthFilter mockAuthFilter = mockAuthFilterProvider.getIfAvailable();
         if (mockAuthFilter != null) {
-            http.addFilterBefore(mockAuthFilter, AnonymousAuthenticationFilter.class);
+            http.addFilterBefore(mockAuthFilter, SessionManagementFilter.class);
         }
 
         TrustedHeaderAuthFilter trustedHeaderAuthFilter = trustedHeaderAuthFilterProvider.getIfAvailable();
         if (trustedHeaderAuthFilter != null) {
-            http.addFilterBefore(trustedHeaderAuthFilter, AnonymousAuthenticationFilter.class);
+            http.addFilterBefore(trustedHeaderAuthFilter, SessionManagementFilter.class);
         }
 
         return http.build();

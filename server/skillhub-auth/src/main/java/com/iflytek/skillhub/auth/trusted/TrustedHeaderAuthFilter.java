@@ -3,6 +3,7 @@ package com.iflytek.skillhub.auth.trusted;
 import com.iflytek.skillhub.auth.rbac.PlatformPrincipal;
 import com.iflytek.skillhub.auth.rbac.PlatformRoleDefaults;
 import com.iflytek.skillhub.auth.repository.UserRoleBindingRepository;
+import com.iflytek.skillhub.auth.util.RequestPathUtils;
 import com.iflytek.skillhub.domain.namespace.Namespace;
 import com.iflytek.skillhub.domain.namespace.NamespaceMember;
 import com.iflytek.skillhub.domain.namespace.NamespaceMemberRepository;
@@ -26,6 +27,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -70,9 +73,9 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String userId = request.getHeader(properties.getUserIdHeader());
+        String userId = decodeHeader(request.getHeader(properties.getUserIdHeader()));
 
-        if (userId != null && !userId.isBlank() && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userId != null && !userId.isBlank()) {
             try {
                 // Find or auto-provision user (with retry for race condition)
                 UserAccount user = findOrProvisionUser(userId, request);
@@ -117,6 +120,32 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    private String decodeHeader(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String decoded;
+        try {
+            decoded = URLDecoder.decode(value, StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException e) {
+            log.warn("Trusted header decode failed, rejecting value: {}", e.getMessage());
+            return null;
+        }
+
+        // Reject values containing ASCII control characters (U+0000–U+001F, U+007F).
+        // These can be used to inject null bytes, newlines, or other harmful sequences.
+        for (int i = 0; i < decoded.length(); i++) {
+            char c = decoded.charAt(i);
+            if (c < 0x20 || c == 0x7F) {
+                log.warn("Trusted header value contains control character at index {}, rejecting", i);
+                return null;
+            }
+        }
+
+        return decoded;
+    }
+
     /**
      * Find existing user or auto-provision a new one.
      *
@@ -141,8 +170,8 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
             throw new IllegalStateException("Auto-provisioning is disabled, user not found: " + userId);
         }
 
-        String email = request.getHeader(properties.getEmailHeader());
-        String displayName = request.getHeader(properties.getDisplayNameHeader());
+        String email = decodeHeader(request.getHeader(properties.getEmailHeader()));
+        String displayName = decodeHeader(request.getHeader(properties.getDisplayNameHeader()));
 
         if (displayName == null || displayName.isBlank()) {
             displayName = userId;
@@ -167,8 +196,8 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
     }
 
     private void syncUserInfo(UserAccount user, HttpServletRequest request) {
-        String email = request.getHeader(properties.getEmailHeader());
-        String displayName = request.getHeader(properties.getDisplayNameHeader());
+        String email = decodeHeader(request.getHeader(properties.getEmailHeader()));
+        String displayName = decodeHeader(request.getHeader(properties.getDisplayNameHeader()));
 
         boolean changed = false;
 
@@ -190,7 +219,7 @@ public class TrustedHeaderAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
+        String path = RequestPathUtils.getForwardedPath(request);
         return !(path.startsWith("/api/v1/")
             || path.startsWith("/api/web/")
             || path.startsWith("/api/cli/"));

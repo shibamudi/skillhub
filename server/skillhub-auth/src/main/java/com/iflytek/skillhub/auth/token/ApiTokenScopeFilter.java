@@ -1,6 +1,7 @@
 package com.iflytek.skillhub.auth.token;
 
 import com.iflytek.skillhub.auth.rbac.PlatformPrincipal;
+import com.iflytek.skillhub.auth.util.RequestPathUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,7 +51,7 @@ public class ApiTokenScopeFilter extends OncePerRequestFilter {
 
         ApiTokenScopeService.AuthorizationDecision decision = apiTokenScopeService.authorize(
             request.getMethod(),
-            request.getRequestURI(),
+            RequestPathUtils.getForwardedPath(request),
             tokenScopes
         );
 
@@ -68,7 +69,7 @@ public class ApiTokenScopeFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
+        String path = RequestPathUtils.getForwardedPath(request);
         return path == null || (!path.startsWith("/api/v1/")
                 && !path.startsWith("/api/web/")
                 && !path.startsWith("/api/cli/"));

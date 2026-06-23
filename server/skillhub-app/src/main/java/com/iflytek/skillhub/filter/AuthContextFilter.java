@@ -3,6 +3,7 @@ package com.iflytek.skillhub.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iflytek.skillhub.auth.policy.RouteSecurityPolicyRegistry;
 import com.iflytek.skillhub.auth.rbac.PlatformPrincipal;
+import com.iflytek.skillhub.auth.util.RequestPathUtils;
 import com.iflytek.skillhub.domain.namespace.NamespaceMember;
 import com.iflytek.skillhub.domain.namespace.NamespaceMemberRepository;
 import com.iflytek.skillhub.domain.namespace.NamespaceRole;
@@ -59,7 +60,8 @@ public class AuthContextFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        if (!routeSecurityPolicyRegistry.shouldProjectRequestContext(request.getRequestURI())) {
+        String path = RequestPathUtils.getForwardedPath(request);
+        if (!routeSecurityPolicyRegistry.shouldProjectRequestContext(path)) {
             filterChain.doFilter(request, response);
             return;
         }
