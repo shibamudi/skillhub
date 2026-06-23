@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Profile;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -46,21 +48,24 @@ public class MockAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                      FilterChain filterChain) throws ServletException, IOException {
         String mockUserId = request.getHeader("X-Mock-User-Id");
-        if (mockUserId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String userId = mockUserId;
-            userRepo.findById(userId)
-                .filter(UserAccount::isActive)
-                .ifPresent(user -> {
-                    Set<String> roles = roleBindingRepo.findByUserId(userId).stream()
-                        .map(rb -> rb.getRole().getCode())
-                        .collect(Collectors.toSet());
-                    roles = PlatformRoleDefaults.withDefaultUserRole(roles);
-                    var principal = new PlatformPrincipal(
-                        user.getId(), user.getDisplayName(), user.getEmail(),
-                        user.getAvatarUrl(), "mock", roles
-                    );
-                    platformSessionService.establishSession(principal, request, false);
-                });
+        if (mockUserId != null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || auth instanceof AnonymousAuthenticationToken) {
+                String userId = mockUserId;
+                userRepo.findById(userId)
+                    .filter(UserAccount::isActive)
+                    .ifPresent(user -> {
+                        Set<String> roles = roleBindingRepo.findByUserId(userId).stream()
+                            .map(rb -> rb.getRole().getCode())
+                            .collect(Collectors.toSet());
+                        roles = PlatformRoleDefaults.withDefaultUserRole(roles);
+                        var principal = new PlatformPrincipal(
+                            user.getId(), user.getDisplayName(), user.getEmail(),
+                            user.getAvatarUrl(), "mock", roles
+                        );
+                        platformSessionService.establishSession(principal, request, false);
+                    });
+            }
         }
         filterChain.doFilter(request, response);
     }
