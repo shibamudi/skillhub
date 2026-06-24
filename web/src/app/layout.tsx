@@ -92,8 +92,8 @@ export function Layout() {
                 to={item.to}
                 className={
                   active
-                    ? 'px-4 py-1.5 rounded-full bg-brand-gradient text-white shadow-sm'
-                    : 'hover:opacity-80 transition-opacity duration-150'
+                    ? 'px-4 py-1.5 rounded-full bg-brand-gradient text-white shadow-sm transition-colors duration-150'
+                    : 'px-4 py-1.5 rounded-full hover:opacity-80 transition-opacity duration-150'
                 }
               >
                 {item.label}
