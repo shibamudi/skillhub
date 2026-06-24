@@ -107,6 +107,7 @@ services:
       SKILLHUB_AUTH_TRUSTED_HEADER_EMAIL_HEADER: ${SKILLHUB_AUTH_TRUSTED_HEADER_EMAIL_HEADER:-X-Forwarded-Email}
       SKILLHUB_AUTH_TRUSTED_HEADER_DISPLAY_NAME_HEADER: ${SKILLHUB_AUTH_TRUSTED_HEADER_DISPLAY_NAME_HEADER:-X-Forwarded-Name}
       SKILLHUB_AUTH_TRUSTED_HEADER_AUTO_PROVISION: ${SKILLHUB_AUTH_TRUSTED_HEADER_AUTO_PROVISION:-true}
+      SKILLHUB_DOWNLOAD_ANON_COOKIE_SECRET: ${SKILLHUB_DOWNLOAD_ANON_COOKIE_SECRET:?SKILLHUB_DOWNLOAD_ANON_COOKIE_SECRET is required}
     volumes:
       - skillhub_storage:/var/lib/skillhub/storage
     depends_on:
@@ -123,7 +124,7 @@ services:
 
   web:
     image: ${SKILLHUB_WEB_IMAGE:-skillhub-web:traefik}
-    build:
+    build: &web-build
       context: ./web
       args:
         VITE_BASE_PATH: ${TRAEFIK_PATH_PREFIX:-/skillhub}
@@ -157,6 +158,7 @@ services:
 
   web-admin:
     image: ${SKILLHUB_WEB_IMAGE:-skillhub-web:traefik}
+    build: *web-build
     restart: unless-stopped
     environment:
       SKILLHUB_API_UPSTREAM: ${SKILLHUB_API_UPSTREAM:-http://server:8080}
