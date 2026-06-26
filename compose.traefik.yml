@@ -1,20 +1,46 @@
 # Traefik deployment: reverse proxy with forward auth
 # - Traefik handles TLS termination and authentication via ForwardAuth middleware
 # - Web service (CAS users) is exposed through Traefik with PathPrefix routing
+# - CLI API endpoints bypass ForwardAuth — SkillHub backend handles its own Bearer token auth
 # - Web-admin service (admin password login) is exposed via Host() + IP whitelist
 # - Backend services (postgres, redis, scanner) remain on internal network only
 #
-# Auth architecture:
-#   /skillhub (any host)               → cas-auth middleware     → web container (CAS trusted header)
-#   skillhub-admin.xxx/skillhub        → IP whitelist only       → web-admin container (password login)
+# Auth architecture (three routers on the web container):
+#   /skillhub/.well-known/*                     → StripPrefix only     → web container → nginx → backend
+#   /skillhub/api/v1/{search,resolve,download,    (SkillHub handles     (SkillHub handles
+#     skills,stars,publish,whoami,labels,         Bearer/Device auth)    Bearer/Device auth)
+#     auth/device} + /skillhub/api/cli/*
+#   /skillhub (everything else, including         → cas-auth middleware  → web container (CAS trusted header)
+#     /api/v1/admin, tokens, account-merge,
+#     user-profile, device/authorize, and
+#     all /api/web/*)
+#   skillhub-admin.xxx/skillhub                 → IP whitelist only    → web-admin container (password login)
 #
-# Both web containers use the SAME image (same VITE_BASE_PATH), differentiated only
-# by runtime env vars. The frontend renders CAS vs password UI based on runtime config.
-# Server supports both auth modes simultaneously — trusted header + direct password.
+# CLI router priority (1000) is set higher than the main router (100) so that
+# API requests hit the strip-only chain before the CAS chain. The SkillHub
+# backend enforces its own authentication (ApiTokenAuthenticationFilter) for
+# CLI endpoints, so CAS is intentionally skipped for CLI traffic.
+#
+# /api/v1/* paths NOT in the CLI router (e.g., /admin, /tokens, /account-merge,
+# /user-profile, /device/authorize) stay on the main router with CAS because
+# the browser SPA calls those directly and relies on ForwardAuth-injected
+# X-User-Id trusted headers.
+#
+# CLI endpoints covered by the bypass (after StripPrefix removes TRAEFIK_PATH_PREFIX):
+#   ClawHub compat:   GET/POST /api/v1/search, /api/v1/resolve/**, /api/v1/download/**,
+#                     GET /api/v1/skills/**, GET /api/v1/whoami,
+#                     POST /api/v1/publish, POST /api/v1/skills, POST /api/v1/stars/**
+#   SkillHub native:  GET /api/cli/v1/skills/search, GET /api/cli/v1/skills/*/*/resolve,
+#                     GET /api/cli/v1/skills/*/*/download,
+#                     GET /api/cli/v1/skills/*/*/versions/*/download,
+#                     POST /api/cli/v1/skills/*/publish, DELETE /api/cli/v1/skills/*/*,
+#                     GET /api/cli/v1/auth/whoami
+#   Device auth:      POST /api/v1/auth/device/code, POST /api/v1/auth/device/token
+#   Discovery:        GET /.well-known/clawhub.json
 #
 # Prerequisites:
 # 1. Traefik must be running and connected to the 'shared' network
-# 2. ForwardAuth middlewares must be defined in Traefik config:
+# 2. ForwardAuth middlewares defined in Traefik config (NOT used by CLI router):
 #    - cas-auth: CAS authentication (outputs X-User-Id)
 #    - user-info-optional: User info enrichment (outputs X-User-Name, etc.)
 # 3. admin-ip-whitelist middleware from gateway-cas (reused)
@@ -148,8 +174,27 @@ services:
       start_period: 10s
     labels:
       - traefik.enable=true
-      - traefik.http.routers.skillhub-web.rule=PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}`)
-      - traefik.http.routers.skillhub-web.middlewares=cas-auth,user-info-optional,skillhub-strip
+
+      # Main web router: CAS ForwardAuth for browser/UI traffic (non-API paths)
+      - traefik.http.routers.skillhub-web-main.priority=100
+      - traefik.http.routers.skillhub-web-main.rule=PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}`)
+      - traefik.http.routers.skillhub-web-main.middlewares=cas-auth,user-info-optional,skillhub-strip
+
+      # CLI router: bypasses CAS; SkillHub handles its own Bearer-token / Device-Flow auth.
+      # Higher priority (1000 > 100) ensures matching before the main router.
+      # IMPORTANT: Only paths listed here bypass CAS. All other /api/v1/* paths
+      # remain on the main router with CAS because the browser SPA calls those
+      # directly and relies on ForwardAuth-injected X-User-Id trusted headers.
+      # Intentionally excluded (SPA-only paths, handled by main CAS router):
+      #   admin, tokens, account-merge, user-profile, device/authorize, reviews,
+      #   promotions, governance, notifications, me, user, account.
+      # Use Path() for endpoints without sub-paths, PathPrefix() with trailing
+      # slash for subtree matches — avoids over-matching hypothetical endpoints
+      # like /api/v1/skills-admin (Traefik PathPrefix is not segment-aware).
+      - traefik.http.routers.skillhub-web-cli.priority=1000
+      - traefik.http.routers.skillhub-web-cli.rule=Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/search`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/resolve`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/resolve/`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/download`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/download/`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/skills`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/skills/`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/stars/`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/publish`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/whoami`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/labels`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/auth/device/code`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/auth/device/token`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/health`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/cli/`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/.well-known/clawhub.json`)
+      - traefik.http.routers.skillhub-web-cli.middlewares=skillhub-strip
+
       - traefik.http.middlewares.skillhub-strip.stripprefix.prefixes=${TRAEFIK_PATH_PREFIX:-/skillhub}
       - traefik.http.services.skillhub-web.loadbalancer.server.port=80
     networks:
