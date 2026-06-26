@@ -33,7 +33,10 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/skills/{skillId}/versions/{versionId}/security-audit")
+@RequestMapping({
+    "/api/v1/skills/{skillId}/versions/{versionId}/security-audit",
+    "/api/web/skills/{skillId}/versions/{versionId}/security-audit",
+})
 public class SecurityAuditController extends BaseApiController {
 
     private final SecurityAuditRepository securityAuditRepository;

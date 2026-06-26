@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { ApiError, fetchJson } from '@/api/client'
+import { ApiError, fetchJson, WEB_API_PREFIX } from '@/api/client'
 import type { SecurityAuditRecord } from './types'
 
 async function fetchSecurityAudits(
@@ -7,7 +7,7 @@ async function fetchSecurityAudits(
   versionId: number
 ): Promise<SecurityAuditRecord[]> {
   try {
-    return await fetchJson(`/api/v1/skills/${skillId}/versions/${versionId}/security-audit`)
+    return await fetchJson(`${WEB_API_PREFIX}/skills/${skillId}/versions/${versionId}/security-audit`)
   } catch (error) {
     // Treat 404 (no audit exists) as empty — this is the expected state
     // for skills that have not been scanned.
