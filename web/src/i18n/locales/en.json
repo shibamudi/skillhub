@@ -29,13 +29,13 @@
         "cli": "CLI"
       },
       "cli": {
-        "description": "Install the 智创技能广场 CLI locally to run skillhub install for skills.",
+        "description": "Install SkillHub CLI locally, then use skillhub install <skill> --registry <url> to install skills",
         "command": "npm i -g @astron-team/skillhub"
       },
       "agent": {
-        "description": "Send a prompt to your Agent to set up the 智创技能广场 Registry",
-        "command": "Read https://www.example.com/registry/skill.md and follow the instructions to setup 智创技能广场 Registry",
-        "commandTemplate": "Read {{url}} and follow the instructions to setup 智创技能广场 Registry"
+        "description": "Send a prompt to your Agent to set up the SkillHub Registry",
+        "command": "Read https://www.example.com/registry/skill.md and follow the instructions to setup SkillHub Registry",
+        "commandTemplate": "Read {{url}} and follow the instructions to setup SkillHub Registry"
       },
       "human": {
         "description": "Use the CLI tool to install Skills",
@@ -744,7 +744,7 @@
     "loginToRate": "Login to star and rate",
     "install": "Install",
     "installMethodClawhub": "ClawHub CLI",
-    "installMethodSkillhub": "智创技能广场 CLI",
+    "installMethodSkillhub": "SkillHub CLI",
     "download": "Download",
     "labelsSectionTitle": "Labels",
     "labelsSectionDescription": "Attach or remove recommended labels that help users filter and discover this skill.",
