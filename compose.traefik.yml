@@ -230,6 +230,7 @@ services:
       start_period: 10s
     labels:
       - traefik.enable=true
+      - traefik.http.routers.skillhub-web-admin.priority=1000
       - traefik.http.routers.skillhub-web-admin.rule=Host(`${TRAEFIK_ADMIN_HOST:-skillhub-admin.localhost}`) && PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}`)
       - traefik.http.routers.skillhub-web-admin.middlewares=admin-ip-whitelist,skillhub-strip
       - traefik.http.services.skillhub-web-admin.loadbalancer.server.port=80
