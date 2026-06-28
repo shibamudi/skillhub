@@ -180,19 +180,25 @@ services:
       - traefik.http.routers.skillhub-web-main.rule=PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}`)
       - traefik.http.routers.skillhub-web-main.middlewares=cas-auth,user-info-optional,skillhub-strip
 
-      # CLI router: bypasses CAS; SkillHub handles its own Bearer-token / Device-Flow auth.
+      # CLI router: bypasses CAS; SkillHub handles its own Bearer-token auth.
       # Higher priority (1000 > 100) ensures matching before the main router.
-      # IMPORTANT: Only paths listed here bypass CAS. All other /api/v1/* paths
-      # remain on the main router with CAS because the browser SPA calls those
-      # directly and relies on ForwardAuth-injected X-User-Id trusted headers.
-      # Intentionally excluded (SPA-only paths, handled by main CAS router):
-      #   admin, tokens, account-merge, user-profile, device/authorize, reviews,
-      #   promotions, governance, notifications, me, user, account.
-      # Use Path() for endpoints without sub-paths, PathPrefix() with trailing
-      # slash for subtree matches — avoids over-matching hypothetical endpoints
-      # like /api/v1/skills-admin (Traefik PathPrefix is not segment-aware).
+      # Only paths listed here bypass CAS. Other /api/v1/* paths remain on the
+      # main router with CAS (SPA calls them and needs X-User-Id from ForwardAuth).
       - traefik.http.routers.skillhub-web-cli.priority=1000
-      - traefik.http.routers.skillhub-web-cli.rule=Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/search`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/resolve`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/resolve/`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/download`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/download/`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/skills`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/skills/`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/stars/`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/publish`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/whoami`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/labels`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/auth/device/code`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/auth/device/token`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/health`) || PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/cli/`) || Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/.well-known/clawhub.json`)
+      - >-
+        traefik.http.routers.skillhub-web-cli.rule=
+        Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/health`) ||
+        Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/whoami`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/auth/device/`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/search`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/resolve`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/download`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/skills`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/stars`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/publish`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/labels`) ||
+        PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/cli/v1/`) ||
+        Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/.well-known/clawhub.json`)
       - traefik.http.routers.skillhub-web-cli.middlewares=skillhub-strip
 
       - traefik.http.middlewares.skillhub-strip.stripprefix.prefixes=${TRAEFIK_PATH_PREFIX:-/skillhub}
