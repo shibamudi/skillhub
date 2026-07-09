@@ -25,6 +25,9 @@ public class Skill {
     @Column(columnDefinition = "TEXT")
     private String summary;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Column(name = "owner_id", nullable = false)
     private String ownerId;
 
@@ -130,6 +133,10 @@ public class Skill {
         return summary;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public String getOwnerId() {
         return ownerId;
     }
@@ -217,6 +224,10 @@ public class Skill {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setSourceSkillId(Long sourceSkillId) {
