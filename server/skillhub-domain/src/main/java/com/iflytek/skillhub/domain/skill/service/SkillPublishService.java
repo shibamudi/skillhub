@@ -290,7 +290,20 @@ public class SkillPublishService {
             java.util.Set<String> platformRoles,
             boolean confirmWarnings,
             Attribution attribution) {
-        return publishFromEntriesInternal(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, false, false, attribution);
+        return publishFromEntries(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, attribution, null);
+    }
+
+    @Transactional
+    public PublishResult publishFromEntries(
+            String namespaceSlug,
+            List<PackageEntry> entries,
+            String publisherId,
+            SkillVisibility visibility,
+            java.util.Set<String> platformRoles,
+            boolean confirmWarnings,
+            Attribution attribution,
+            String description) {
+        return publishFromEntriesInternal(namespaceSlug, entries, publisherId, visibility, platformRoles, confirmWarnings, false, false, attribution, description);
     }
 
     /**
@@ -332,7 +345,8 @@ public class SkillPublishService {
                 confirmWarnings,  // confirmWarnings: honour caller's choice for rerelease
                 false,  // forceAutoPublish=false: respect visibility rules
                 true,
-                Attribution.EMPTY  // rerelease preserves existing attribution
+                Attribution.EMPTY,  // rerelease preserves existing attribution
+                null  // rerelease preserves existing description
         );
     }
 
@@ -345,7 +359,8 @@ public class SkillPublishService {
             boolean confirmWarnings,
             boolean forceAutoPublish,
             boolean bypassMembershipCheck,
-            Attribution attribution) {
+            Attribution attribution,
+            String description) {
 
         // 1. Find namespace by slug
         Namespace namespace = namespaceRepository.findBySlug(namespaceSlug)
@@ -565,6 +580,9 @@ public class SkillPublishService {
         // 12. Update skill metadata and move the published pointer for auto-publish flows
         skill.setDisplayName(metadata.name());
         skill.setSummary(metadata.description());
+        if (description != null) {
+            skill.setDescription(description);
+        }
         skill.setAuthorName(metadata.attribution().author());
         skill.setSourcePlatform(metadata.attribution().sourcePlatform());
         skill.setSourceUrl(metadata.attribution().sourceUrl());
