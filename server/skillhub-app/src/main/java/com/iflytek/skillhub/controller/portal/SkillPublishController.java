@@ -63,6 +63,7 @@ public class SkillPublishController extends BaseApiController {
             @RequestParam(value = "authorName", required = false) @Size(max = 256) String authorName,
             @RequestParam(value = "sourcePlatform", required = false) @Size(max = 128) String sourcePlatform,
             @RequestParam(value = "sourceUrl", required = false) @Size(max = 512) String sourceUrl,
+            @RequestParam("description") @Size(max = 1000) String description,
             @AuthenticationPrincipal PlatformPrincipal principal) throws IOException {
 
         SkillVisibility skillVisibility = SkillVisibility.valueOf(visibility.toUpperCase());
@@ -107,7 +108,8 @@ public class SkillPublishController extends BaseApiController {
                 skillVisibility,
                 principal.platformRoles(),
                 confirmWarnings,
-                attribution
+                attribution,
+                description
         );
 
         PublishResponse response = new PublishResponse(

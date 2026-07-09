@@ -14,10 +14,12 @@ import com.iflytek.skillhub.ratelimit.RateLimit;
 import com.iflytek.skillhub.service.AuditRequestContext;
 import com.iflytek.skillhub.service.cli.CliSkillAppService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Size;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +29,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cli/v1/skills")
+@Validated
 public class CliSkillController extends BaseApiController {
     private final CliSkillAppService cliSkillAppService;
     private final SkillPackageArchiveExtractor archiveExtractor;
@@ -101,6 +104,7 @@ public class CliSkillController extends BaseApiController {
             @PathVariable String namespace,
             @RequestPart("file") MultipartFile file,
             @RequestPart(value = "visibility", required = false) String visibility,
+            @RequestPart(value = "description", required = false) @Size(max = 1000) String description,
             @AuthenticationPrincipal PlatformPrincipal principal) throws IOException {
         List<PackageEntry> entries;
         try {
@@ -115,7 +119,7 @@ public class CliSkillController extends BaseApiController {
             throw new DomainBadRequestException("error.skill.publish.visibility.invalid", visibility);
         }
         var result = cliSkillAppService.validatePublish(
-                namespace, entries, principal.userId(), resolvedVisibility, principal.platformRoles());
+                namespace, entries, principal.userId(), resolvedVisibility, principal.platformRoles(), description);
         return ok("response.success.read", result);
     }
 
@@ -125,6 +129,7 @@ public class CliSkillController extends BaseApiController {
             @PathVariable String namespace,
             @RequestPart("file") MultipartFile file,
             @RequestPart(value = "visibility", required = false) String visibility,
+            @RequestPart(value = "description", required = false) @Size(max = 1000) String description,
             @AuthenticationPrincipal PlatformPrincipal principal) throws IOException {
         List<PackageEntry> entries;
         try {
@@ -135,7 +140,8 @@ public class CliSkillController extends BaseApiController {
         var result = cliSkillAppService.publish(
                 namespace, entries, principal.userId(),
                 SkillVisibility.valueOf((visibility != null ? visibility : "PUBLIC").toUpperCase()),
-                principal.platformRoles());
+                principal.platformRoles(),
+                description);
         return ok("response.success.published", result);
     }
 }

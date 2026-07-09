@@ -2,6 +2,7 @@ package com.iflytek.skillhub.service.cli;
 
 import com.iflytek.skillhub.domain.namespace.NamespaceRole;
 import com.iflytek.skillhub.domain.skill.SkillVisibility;
+import com.iflytek.skillhub.domain.skill.metadata.Attribution;
 import com.iflytek.skillhub.domain.skill.service.SkillDownloadService;
 import com.iflytek.skillhub.domain.skill.service.SkillPublishService;
 import com.iflytek.skillhub.domain.skill.service.SkillQueryService;
@@ -120,7 +121,9 @@ public class CliSkillAppService {
         );
     }
 
-    public CliDryRunResponse validatePublish(String namespace, List<PackageEntry> entries, String publisherId, SkillVisibility visibility, Set<String> platformRoles) {
+    public CliDryRunResponse validatePublish(String namespace, List<PackageEntry> entries, String publisherId, SkillVisibility visibility, Set<String> platformRoles, String description) {
+        // description is accepted for API consistency with publish() but not used here:
+        // dry-run validation checks package contents, not uploader-provided metadata.
         SkillPublishService.DryRunResult result = skillPublishService.validateOnly(
                 namespace, entries, publisherId, visibility, platformRoles);
         return new CliDryRunResponse(
@@ -132,9 +135,9 @@ public class CliSkillAppService {
         );
     }
 
-    public CliPublishResponse publish(String namespace, List<PackageEntry> entries, String publisherId, SkillVisibility visibility, Set<String> platformRoles) {
+    public CliPublishResponse publish(String namespace, List<PackageEntry> entries, String publisherId, SkillVisibility visibility, Set<String> platformRoles, String description) {
         SkillPublishService.PublishResult result = skillPublishService.publishFromEntries(
-                namespace, entries, publisherId, visibility, platformRoles, false
+                namespace, entries, publisherId, visibility, platformRoles, false, Attribution.EMPTY, description
         );
 
         return new CliPublishResponse(
