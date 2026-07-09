@@ -48,6 +48,7 @@ async function publishSkill(params: {
   namespace: string
   file: File
   visibility: string
+  description?: string
   confirmWarnings?: boolean
   authorName?: string
   sourcePlatform?: string
@@ -57,6 +58,7 @@ async function publishSkill(params: {
   const formData = new FormData()
   formData.append('file', params.file)
   formData.append('visibility', params.visibility)
+  formData.append('description', params.description || '')
   formData.append('confirmWarnings', String(params.confirmWarnings === true))
   if (params.authorName) formData.append('authorName', params.authorName)
   if (params.sourcePlatform) formData.append('sourcePlatform', params.sourcePlatform)

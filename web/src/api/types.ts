@@ -160,6 +160,7 @@ export interface SkillSummary {
   slug: string
   displayName: string
   summary?: string
+  description?: string
   visibility?: string
   status?: string
   downloadCount: number
@@ -218,6 +219,7 @@ export interface SkillDetail {
   ownerId?: string
   ownerDisplayName?: string
   summary?: string
+  description?: string
   visibility: string
   status: string
   downloadCount: number
