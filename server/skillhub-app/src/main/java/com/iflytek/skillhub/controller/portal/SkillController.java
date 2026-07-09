@@ -89,6 +89,7 @@ public class SkillController extends BaseApiController {
                 detail.sourcePlatform(),
                 detail.sourceUrl(),
                 detail.summary(),
+                detail.description(),
                 detail.visibility(),
                 detail.status(),
                 detail.downloadCount(),
