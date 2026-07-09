@@ -51,7 +51,7 @@ class CliDryRunValidateTest {
     void validatePublish_returnsValidResult() throws Exception {
         givenValidPublishToken();
         given(cliSkillAppService.validatePublish(
-                eq("global"), any(), eq("user-1"), eq(SkillVisibility.PUBLIC), eq(Set.of("USER"))))
+                eq("global"), any(), eq("user-1"), eq(SkillVisibility.PUBLIC), eq(Set.of("USER")), eq(null)))
                 .willReturn(new CliDryRunResponse(
                         true, List.of(), List.of(),
                         "my-skill", "1.0.0"));
@@ -72,7 +72,7 @@ class CliDryRunValidateTest {
     void validatePublish_returnsInvalidResult() throws Exception {
         givenValidPublishToken();
         given(cliSkillAppService.validatePublish(
-                eq("global"), any(), eq("user-1"), eq(SkillVisibility.PUBLIC), eq(Set.of("USER"))))
+                eq("global"), any(), eq("user-1"), eq(SkillVisibility.PUBLIC), eq(Set.of("USER")), eq(null)))
                 .willReturn(new CliDryRunResponse(
                         false, List.of("Missing required file: SKILL.md at root"), List.of(),
                         null, null));
@@ -93,7 +93,7 @@ class CliDryRunValidateTest {
     void validatePublish_acceptsCustomVisibility() throws Exception {
         givenValidPublishToken();
         given(cliSkillAppService.validatePublish(
-                eq("global"), any(), eq("user-1"), eq(SkillVisibility.PRIVATE), eq(Set.of("USER"))))
+                eq("global"), any(), eq("user-1"), eq(SkillVisibility.PRIVATE), eq(Set.of("USER")), eq(null)))
                 .willReturn(new CliDryRunResponse(
                         true, List.of(), List.of(), "my-skill", "1.0.0"));
 

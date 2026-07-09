@@ -71,7 +71,7 @@ class CliSkillAppServiceTest {
         var searchResponse = new SkillSearchAppService.SearchResponse(
                 List.of(new SkillSummaryResponse(
                         1L, "pdf-parser", "PDF Parser", "Parse PDFs",
-                        "PUBLIC", "ACTIVE", 100L, 5, BigDecimal.valueOf(4.5), 10,
+                        null, "PUBLIC", "ACTIVE", 100L, 5, BigDecimal.valueOf(4.5), 10,
                         "global", Instant.now(), false,
                         new SkillLifecycleVersionResponse(1L, "1.2.0", "PUBLISHED"),
                         new SkillLifecycleVersionResponse(1L, "1.2.0", "PUBLISHED"),
@@ -99,7 +99,7 @@ class CliSkillAppServiceTest {
                 List.of(
                         new SkillSummaryResponse(
                                 2L, "ready", "Ready", "Installable",
-                                "PUBLIC", "ACTIVE", 0L, 0, BigDecimal.ZERO, 0,
+                                null, "PUBLIC", "ACTIVE", 0L, 0, BigDecimal.ZERO, 0,
                                 "global", Instant.now(), false,
                                 new SkillLifecycleVersionResponse(2L, "1.0.0", "PUBLISHED"),
                                 new SkillLifecycleVersionResponse(2L, "1.0.0", "PUBLISHED"),
@@ -244,10 +244,10 @@ class CliSkillAppServiceTest {
         );
         var mockVersion = org.mockito.Mockito.mock(SkillVersion.class);
         given(mockVersion.getVersion()).willReturn("1.0.0");
-        given(skillPublishService.publishFromEntries("global", entries, "user-1", SkillVisibility.PUBLIC, Set.of("USER"), false))
+        given(skillPublishService.publishFromEntries("global", entries, "user-1", SkillVisibility.PUBLIC, Set.of("USER"), false, com.iflytek.skillhub.domain.skill.metadata.Attribution.EMPTY, "CLI description"))
                 .willReturn(new SkillPublishService.PublishResult(1L, "test-skill", mockVersion));
 
-        CliPublishResponse response = service.publish("global", entries, "user-1", SkillVisibility.PUBLIC, Set.of("USER"));
+        CliPublishResponse response = service.publish("global", entries, "user-1", SkillVisibility.PUBLIC, Set.of("USER"), "CLI description");
 
         assertEquals("global", response.namespace());
         assertEquals("test-skill", response.slug());

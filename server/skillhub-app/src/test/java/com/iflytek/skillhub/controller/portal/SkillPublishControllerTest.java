@@ -1,5 +1,6 @@
 package com.iflytek.skillhub.controller.portal;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -79,7 +80,8 @@ class SkillPublishControllerTest {
             eq(SkillVisibility.PUBLIC),
             eq(Set.of("SUPER_ADMIN")),
             eq(false),
-            eq(Attribution.EMPTY)))
+            eq(Attribution.EMPTY),
+            eq("Test description")))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(
@@ -106,6 +108,7 @@ class SkillPublishControllerTest {
         mockMvc.perform(multipart("/api/v1/skills/global/publish")
                 .file(file)
                 .param("visibility", "PUBLIC")
+                .param("description", "Test description")
                 .with(authentication(auth))
                 .with(csrf()))
             .andExpect(status().isOk())
@@ -131,7 +134,8 @@ class SkillPublishControllerTest {
             eq(SkillVisibility.PUBLIC),
             eq(Set.of("SUPER_ADMIN")),
             eq(true),
-            eq(Attribution.EMPTY)))
+            eq(Attribution.EMPTY),
+            eq("Warning confirmation description")))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(
@@ -159,6 +163,7 @@ class SkillPublishControllerTest {
                 .file(file)
                 .param("visibility", "PUBLIC")
                 .param("confirmWarnings", "true")
+                .param("description", "Warning confirmation description")
                 .with(authentication(auth))
                 .with(csrf()))
             .andExpect(status().isOk())
@@ -179,6 +184,7 @@ class SkillPublishControllerTest {
         mockMvc.perform(multipart("/api/v1/skills/global/publish")
                 .file(file)
                 .param("visibility", "PUBLIC")
+                .param("description", "Nested skill md description")
                 .with(authentication(auth))
                 .with(csrf()))
             .andExpect(status().isBadRequest())
@@ -188,7 +194,7 @@ class SkillPublishControllerTest {
         verify(skillPublishService, never()).publishFromEntries(
             eq("global"), anyList(), eq("usr_1"),
             eq(SkillVisibility.PUBLIC), eq(Set.of("SUPER_ADMIN")), eq(false),
-            eq(Attribution.EMPTY));
+            eq(Attribution.EMPTY), any());
     }
 
     @Test
@@ -203,7 +209,8 @@ class SkillPublishControllerTest {
             eq("global"), ArgumentMatchers.<List<PackageEntry>>any(),
             eq("usr_1"), eq(SkillVisibility.PUBLIC),
             eq(Set.of("SUPER_ADMIN")), eq(true),
-            eq(Attribution.EMPTY)))
+            eq(Attribution.EMPTY),
+            eq("Nested skill md success description")))
             .willReturn(new SkillPublishService.PublishResult(12L, "demo-skill", version));
 
         PlatformPrincipal principal = new PlatformPrincipal(
@@ -219,6 +226,7 @@ class SkillPublishControllerTest {
                 .file(file)
                 .param("visibility", "PUBLIC")
                 .param("confirmWarnings", "true")
+                .param("description", "Nested skill md success description")
                 .with(authentication(auth))
                 .with(csrf()))
             .andExpect(status().isOk())

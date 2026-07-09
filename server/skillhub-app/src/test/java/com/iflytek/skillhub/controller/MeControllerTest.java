@@ -63,6 +63,7 @@ class MeControllerTest {
                                 "copilot",
                                 "Copilot",
                                 "Assist with code review",
+                                null,
                                 "PUBLIC",
                                 "ACTIVE",
                                 12L,
