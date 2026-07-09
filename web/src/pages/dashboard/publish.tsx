@@ -51,6 +51,7 @@ export function PublishPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [namespaceSlug, setNamespaceSlug] = useState<string>(prefill.namespace)
   const [visibility, setVisibility] = useState<string>(prefill.visibility)
+  const [description, setDescription] = useState('')
   const [attribution, setAttribution] = useState<AttributionFields>(EMPTY_ATTRIBUTION)
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
   const [precheckWarnings, setPrecheckWarnings] = useState<string[]>([])
@@ -65,6 +66,7 @@ export function PublishPage() {
   useEffect(() => {
     setNamespaceSlug(prefill.namespace)
     setVisibility(prefill.visibility)
+    setDescription('')
     setAttribution(EMPTY_ATTRIBUTION)
   }, [prefill.namespace, prefill.visibility])
 
@@ -86,11 +88,17 @@ export function PublishPage() {
       return
     }
 
+    if (!description.trim()) {
+      toast.error(t('publish.descriptionRequired'))
+      return
+    }
+
     try {
       const result = await publishMutation.mutateAsync({
         namespace: namespaceSlug,
         file: selectedFile,
         visibility,
+        description: description.trim(),
         confirmWarnings,
         authorName: attribution.authorName.trim() || undefined,
         sourcePlatform: attribution.sourcePlatform.trim() || undefined,
@@ -173,7 +181,7 @@ export function PublishPage() {
 
       <Card className="p-8 space-y-8">
         <div className="space-y-3">
-          <Label htmlFor="namespace" className="text-sm font-semibold font-heading">{t('publish.namespace')}</Label>
+          <Label htmlFor="namespace" className="text-sm font-semibold font-heading">{t('publish.namespace')}<span className="text-destructive"> *</span></Label>
           {isLoadingNamespaces ? (
             <div className="h-11 animate-shimmer rounded-lg" />
           ) : (
@@ -199,7 +207,7 @@ export function PublishPage() {
         </div>
 
         <div className="space-y-3">
-          <Label htmlFor="visibility" className="text-sm font-semibold font-heading">{t('publish.visibility')}</Label>
+          <Label htmlFor="visibility" className="text-sm font-semibold font-heading">{t('publish.visibility')}<span className="text-destructive"> *</span></Label>
           <Select value={visibility} onValueChange={setVisibility}>
             <SelectTrigger id="visibility">
               <SelectValue />
@@ -213,7 +221,20 @@ export function PublishPage() {
         </div>
 
         <div className="space-y-3">
-          <Label className="text-sm font-semibold font-heading">{t('publish.file')}</Label>
+          <Label htmlFor="description" className="text-sm font-semibold font-heading">{t('publish.description')}<span className="text-destructive"> *</span></Label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder={t('publish.descriptionPlaceholder')}
+            disabled={publishMutation.isPending}
+            rows={3}
+            className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+        </div>
+
+        <div className="space-y-3">
+          <Label className="text-sm font-semibold font-heading">{t('publish.file')}<span className="text-destructive"> *</span></Label>
           <UploadZone
             key={selectedFile ? `${selectedFile.name}-${selectedFile.lastModified}` : 'empty'}
             onFileSelect={handleFileSelect}
@@ -277,7 +298,7 @@ export function PublishPage() {
           className="w-full text-primary-foreground disabled:text-primary-foreground"
           size="lg"
           onClick={handlePublish}
-          disabled={!selectedFile || !namespaceSlug || publishMutation.isPending}
+          disabled={!selectedFile || !namespaceSlug || !description.trim() || publishMutation.isPending}
         >
           {publishMutation.isPending ? t('publish.publishing') : t('publish.confirm')}
         </Button>
