@@ -839,6 +839,9 @@ export function SkillDetailPage() {
               </div>
             )}
           </div>
+          {skill.description && (
+            <p className="text-lg text-foreground leading-relaxed font-medium">{skill.description}</p>
+          )}
           {skill.summary && (
             <p className="text-lg text-muted-foreground leading-relaxed">{skill.summary}</p>
           )}
@@ -1238,7 +1241,7 @@ export function SkillDetailPage() {
         <ShareButton
           namespace={namespace}
           slug={slug}
-          description={skill.summary}
+          description={skill.description || skill.summary}
         />
 
         {skill.canManageLifecycle && selectedVersionEntry && (

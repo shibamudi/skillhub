@@ -53,9 +53,9 @@ export function SkillCard({ skill, onClick, highlightStarred = true }: SkillCard
           </div>
         </div>
 
-        {skill.summary && (
+        {(skill.description || skill.summary) && (
           <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">
-            {skill.summary}
+            {skill.description || skill.summary}
           </p>
         )}
 
