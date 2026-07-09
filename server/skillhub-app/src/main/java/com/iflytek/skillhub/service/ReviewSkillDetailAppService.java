@@ -66,6 +66,7 @@ public class ReviewSkillDetailAppService {
                 snapshot.skill().getSourcePlatform(),
                 snapshot.skill().getSourceUrl(),
                 snapshot.skill().getSummary(),
+                snapshot.skill().getDescription(),
                 snapshot.skill().getVisibility().name(),
                 snapshot.skill().getStatus().name(),
                 snapshot.skill().getDownloadCount(),

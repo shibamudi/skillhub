@@ -13,6 +13,7 @@ public record SkillDetailResponse(
         String sourcePlatform,
         String sourceUrl,
         String summary,
+        String description,
         String visibility,
         String status,
         Long downloadCount,
