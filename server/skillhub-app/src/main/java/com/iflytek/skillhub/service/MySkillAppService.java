@@ -194,8 +194,9 @@ public class MySkillAppService {
         String displayName = skill.getDisplayName() != null ? skill.getDisplayName().toLowerCase(java.util.Locale.ROOT) : "";
         String slug = skill.getSlug() != null ? skill.getSlug().toLowerCase(java.util.Locale.ROOT) : "";
         String summary = skill.getSummary() != null ? skill.getSummary().toLowerCase(java.util.Locale.ROOT) : "";
+        String description = skill.getDescription() != null ? skill.getDescription().toLowerCase(java.util.Locale.ROOT) : "";
 
-        return displayName.contains(keyword) || slug.contains(keyword) || summary.contains(keyword);
+        return displayName.contains(keyword) || slug.contains(keyword) || summary.contains(keyword) || description.contains(keyword);
     }
 
     private Page<Skill> filterSkillsByLifecycle(String userId,
