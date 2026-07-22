@@ -8,7 +8,7 @@ SkillHub 提供多种 CLI 工具，任选其一即可管理技能包：
 
 ```bash
 # 配置 SkillHub 注册中心地址
-export CLAWHUB_REGISTRY=https://skill.xfyun.cn
+export CLAWHUB_REGISTRY=https://xplt.sdu.edu.cn/skillhub
 
 # 搜索技能包
 npx clawhub search email
@@ -27,20 +27,20 @@ npx clawhub publish ./my-skill
 npm install -g @astron-team/skillhub
 
 # 搜索技能包（--registry 指定注册中心地址）
-skillhub search email --registry https://skill.xfyun.cn
+skillhub search email --registry https://xplt.sdu.edu.cn/skillhub
 
 # 安装技能包
-skillhub install my-skill --registry https://skill.xfyun.cn
+skillhub install my-skill --registry https://xplt.sdu.edu.cn/skillhub
 ```
 
 ### 方式三：SkillHub CLI（npx 直接运行，无需安装）
 
 ```bash
 # 搜索技能包（--registry 指定注册中心地址）
-npx @astron-team/skillhub@latest search email --registry https://skill.xfyun.cn
+npx @astron-team/skillhub@latest search email --registry https://xplt.sdu.edu.cn/skillhub
 
 # 安装技能包
-npx @astron-team/skillhub@latest install my-skill --registry https://skill.xfyun.cn
+npx @astron-team/skillhub@latest install my-skill --registry https://xplt.sdu.edu.cn/skillhub
 ```
 
 ## 发布第一个技能包
@@ -63,7 +63,7 @@ my-skill/
 
 ```bash
 # 配置注册中心
-export CLAWHUB_REGISTRY=https://skill.xfyun.cn
+export CLAWHUB_REGISTRY=https://xplt.sdu.edu.cn/skillhub
 
 # 发布到默认命名空间
 npx clawhub publish ./my-skill
@@ -88,7 +88,7 @@ npx clawhub publish ./my-skill --namespace my-team
 
 ### 使用 Web UI 发布
 
-1. 访问 https://skill.xfyun.cn/dashboard/publish
+1. 访问 https://xplt.sdu.edu.cn/skillhub/dashboard/publish
 2. 选择命名空间（如果没有，先创建一个）
 3. 上传 zip 文件
 4. 选择可见性（PUBLIC / PRIVATE / INTERNAL）
@@ -111,7 +111,7 @@ npx clawhub install my-team--pdf-parser
 
 ### 使用 Web UI
 
-1. 访问 https://skill.xfyun.cn/search
+1. 访问 https://xplt.sdu.edu.cn/skillhub/search
 2. 输入关键词搜索
 3. 点击技能包查看详情
 4. 点击「下载」或复制安装命令

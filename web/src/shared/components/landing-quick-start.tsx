@@ -174,7 +174,7 @@ export function LandingQuickStartSection() {
 
             <div className="mt-4 text-center">
               <a
-                href="https://iflytek.github.io/skillhub/quickstart.html"
+                href="https://xplt.sdu.edu.cn/skillhub/quickstart.html"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-medium hover:underline"

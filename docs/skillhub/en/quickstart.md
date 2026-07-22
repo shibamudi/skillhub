@@ -8,7 +8,7 @@ SkillHub provides multiple CLI tools. Choose any one to manage skill packages:
 
 ```bash
 # Configure the SkillHub registry URL
-export CLAWHUB_REGISTRY=https://skill.xfyun.cn
+export CLAWHUB_REGISTRY=https://xplt.sdu.edu.cn/skillhub
 
 # Search for skill packages
 npx clawhub search email
@@ -27,20 +27,20 @@ npx clawhub publish ./my-skill
 npm install -g @astron-team/skillhub
 
 # Search for skill packages (--registry specifies the registry URL)
-skillhub search email --registry https://skill.xfyun.cn
+skillhub search email --registry https://xplt.sdu.edu.cn/skillhub
 
 # Install a skill package
-skillhub install my-skill --registry https://skill.xfyun.cn
+skillhub install my-skill --registry https://xplt.sdu.edu.cn/skillhub
 ```
 
 ### Option 3: SkillHub CLI (run via npx, no installation required)
 
 ```bash
 # Search for skill packages (--registry specifies the registry URL)
-npx @astron-team/skillhub@latest search email --registry https://skill.xfyun.cn
+npx @astron-team/skillhub@latest search email --registry https://xplt.sdu.edu.cn/skillhub
 
 # Install a skill package
-npx @astron-team/skillhub@latest install my-skill --registry https://skill.xfyun.cn
+npx @astron-team/skillhub@latest install my-skill --registry https://xplt.sdu.edu.cn/skillhub
 ```
 
 ## Publish Your First Skill Package
@@ -63,7 +63,7 @@ my-skill/
 
 ```bash
 # Configure the registry
-export CLAWHUB_REGISTRY=https://skill.xfyun.cn
+export CLAWHUB_REGISTRY=https://xplt.sdu.edu.cn/skillhub
 
 # Publish to the default namespace
 npx clawhub publish ./my-skill
@@ -88,7 +88,7 @@ Administrators will receive a notification and the skill package will be officia
 
 ### Publish via Web UI
 
-1. Visit https://skill.xfyun.cn/dashboard/publish
+1. Visit https://xplt.sdu.edu.cn/skillhub/dashboard/publish
 2. Select a namespace (create one first if needed)
 3. Upload a zip file
 4. Choose visibility (PUBLIC / PRIVATE / INTERNAL)
@@ -111,7 +111,7 @@ npx clawhub install my-team--pdf-parser
 
 ### Using the Web UI
 
-1. Visit https://skill.xfyun.cn/search
+1. Visit https://xplt.sdu.edu.cn/skillhub/search
 2. Enter keywords to search
 3. Click a skill package to view details
 4. Click "Download" or copy the install command
