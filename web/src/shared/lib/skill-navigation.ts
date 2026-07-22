@@ -38,7 +38,14 @@ export function parseReturnToNavigation(returnTo: string): {
   }
   const search: Record<string, string> = {}
   url.searchParams.forEach((value, key) => {
-    search[key] = value
+    // TanStack Router's default stringifySearch JSON-stringifies values that
+    // parse as JSON. URLSearchParams always returns strings, so '0' would
+    // become '"0"' in the URL. Parse back to native types to avoid this.
+    try {
+      search[key] = JSON.parse(value)
+    } catch {
+      search[key] = value
+    }
   })
   return { to: pathname, search }
 }
