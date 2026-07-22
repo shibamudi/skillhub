@@ -33,7 +33,6 @@
         "command": "npm i -g @astron-team/skillhub",
         "commandTemplate": "# 方式一：npm 全局安装\nnpm install -g @astron-team/skillhub\n# 搜索技能（--registry 指定注册中心地址）\nskillhub search email --registry {{url}}\n# 安装技能\nskillhub install my-skill --registry {{url}}\n\n# 方式二：npx 直接运行（无需安装）\nnpx @astron-team/skillhub@latest search email --registry {{url}}\nnpx @astron-team/skillhub@latest install my-skill --registry {{url}}"
       },
-      "guideLink": "查看完整指南 →",
       "agent": {
         "description": "发送提示词给你的 Agent，以设置 SkillHub Registry",
         "command": "阅读 https://www.example.com/registry/skill.md，并按照说明完成 SkillHub Registry 的配置",

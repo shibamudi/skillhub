@@ -176,18 +176,6 @@ export function LandingQuickStartSection() {
               </div>
               <CompactCopyButton text={currentTab.command} />
             </div>
-
-            <div className="mt-4 text-center">
-              <a
-                href="https://xplt.sdu.edu.cn/skillhub/docs/quickstart.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-medium hover:underline"
-                style={{ color: 'hsl(var(--primary))' }}
-              >
-                {t('landing.quickStart.guideLink', { defaultValue: '查看完整指南 →' })}
-              </a>
-            </div>
           </div>
         </div>
       </div>
