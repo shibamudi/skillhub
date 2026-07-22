@@ -30,10 +30,9 @@ test.describe('Landing Quick Start CLI Tab (Real API)', () => {
     await expect(page.getByText('npm install -g @astron-team/skillhub')).toBeVisible()
     await expect(page.getByText('skillhub search email --registry')).toBeVisible()
     await expect(page.getByText('npx @astron-team/skillhub@latest')).toBeVisible()
-    await expect(page.getByText('Full guide →')).toBeVisible()
   })
 
-  test('agent and human tabs keep their original commands', async ({ page }) => {
+  test('agent and human tabs expose their commands', async ({ page }) => {
     await page.goto('/')
 
     const agentTab = page.getByRole('button', { name: 'I am Agent', exact: true })
@@ -45,7 +44,9 @@ test.describe('Landing Quick Start CLI Tab (Real API)', () => {
 
     await humanTab.click()
     await expect(humanTab).toHaveAttribute('aria-pressed', 'true')
-    await expect(page.getByText('npx clawhub search <keyword>', { exact: true })).toBeVisible()
+    await expect(page.getByText('export CLAWHUB_REGISTRY=')).toBeVisible()
+    await expect(page.getByText('clawhub search email')).toBeVisible()
+    await expect(page.getByText('clawhub install my-skill')).toBeVisible()
 
     await agentTab.click()
     await expect(agentTab).toHaveAttribute('aria-pressed', 'true')

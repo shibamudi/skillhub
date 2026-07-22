@@ -82,6 +82,11 @@ export function LandingQuickStartSection() {
     url: baseUrl,
   })
 
+  const humanCommand = t('landing.quickStart.human.commandTemplate', {
+    defaultValue: t('landing.quickStart.human.command'),
+    url: baseUrl,
+  })
+
   const tabs: LandingQuickStartTab[] = [
     {
       id: 'agent',
@@ -93,7 +98,7 @@ export function LandingQuickStartSection() {
       id: 'human',
       label: t('landing.quickStart.tabs.human'),
       description: t('landing.quickStart.human.description'),
-      command: t('landing.quickStart.human.command'),
+      command: humanCommand,
     },
     {
       id: 'cli',
@@ -170,18 +175,6 @@ export function LandingQuickStartSection() {
                 </code>
               </div>
               <CompactCopyButton text={currentTab.command} />
-            </div>
-
-            <div className="mt-4 text-center">
-              <a
-                href="https://xplt.sdu.edu.cn/skillhub/quickstart.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-medium hover:underline"
-                style={{ color: 'hsl(var(--primary))' }}
-              >
-                {t('landing.quickStart.guideLink', { defaultValue: '查看完整指南 →' })}
-              </a>
             </div>
           </div>
         </div>
