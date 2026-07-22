@@ -128,7 +128,9 @@ curl -H "X-Mock-User-Id: local-admin" http://localhost:8080/api/v1/auth/me
 
 ## 安装 CLI 工具
 
-SkillHub 兼容 OpenClaw CLI，可以使用 `npx clawhub` 命令管理技能包：
+SkillHub 提供多种 CLI 工具，任选其一即可管理技能包：
+
+### 方式一：ClawHub CLI（兼容 OpenClaw，npx 直接运行）
 
 ```bash
 # 配置 SkillHub 注册中心地址
@@ -142,6 +144,29 @@ npx clawhub install my-skill
 
 # 发布技能包
 npx clawhub publish ./my-skill
+```
+
+### 方式二：SkillHub CLI（npm 全局安装）
+
+```bash
+# 安装 CLI
+npm install -g @astron-team/skillhub
+
+# 搜索技能包（--registry 指定注册中心地址）
+skillhub search email --registry http://localhost:8080
+
+# 安装技能包
+skillhub install my-skill --registry http://localhost:8080
+```
+
+### 方式三：SkillHub CLI（npx 直接运行，无需安装）
+
+```bash
+# 搜索技能包（--registry 指定注册中心地址）
+npx @astron-team/skillhub@latest search email --registry http://localhost:8080
+
+# 安装技能包
+npx @astron-team/skillhub@latest install my-skill --registry http://localhost:8080
 ```
 
 ## 发布第一个技能包

@@ -58,7 +58,7 @@ function CompactCopyButton({ text }: { text: string }) {
       onClick={handleCopy}
       aria-label={label}
       title={label}
-      className="absolute right-2.5 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-xl border bg-white transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer"
+      className="absolute right-2.5 top-2.5 flex h-9 w-9 items-center justify-center rounded-xl border bg-white transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer"
       style={{ borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
     >
       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -75,6 +75,11 @@ export function LandingQuickStartSection() {
   const agentCommand = t('landing.quickStart.agent.commandTemplate', {
     defaultValue: t('landing.quickStart.agent.command'),
     url: `${baseUrl}/registry/skill.md`,
+  })
+
+  const cliCommand = t('landing.quickStart.cli.commandTemplate', {
+    defaultValue: t('landing.quickStart.cli.command'),
+    url: baseUrl,
   })
 
   const tabs: LandingQuickStartTab[] = [
@@ -94,7 +99,7 @@ export function LandingQuickStartSection() {
       id: 'cli',
       label: t('landing.quickStart.tabs.cli'),
       description: t('landing.quickStart.cli.description'),
-      command: t('landing.quickStart.cli.command'),
+      command: cliCommand,
     },
   ]
 
@@ -156,15 +161,27 @@ export function LandingQuickStartSection() {
               className="relative rounded-2xl border bg-slate-50/90 px-4 py-3 pr-14 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
               style={{ borderColor: 'hsl(var(--border))' }}
             >
-              <div className="overflow-x-auto whitespace-nowrap">
+              <div className="overflow-x-auto">
                 <code
-                  className="font-mono text-sm md:text-base"
+                  className="font-mono text-sm md:text-base whitespace-pre-wrap break-all"
                   style={{ color: currentTab.id === 'agent' ? '#16A34A' : '#0F172A' }}
                 >
                   {currentTab.command}
                 </code>
               </div>
               <CompactCopyButton text={currentTab.command} />
+            </div>
+
+            <div className="mt-4 text-center">
+              <a
+                href="https://iflytek.github.io/skillhub/quickstart.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium hover:underline"
+                style={{ color: 'hsl(var(--primary))' }}
+              >
+                {t('landing.quickStart.guideLink', { defaultValue: '查看完整指南 →' })}
+              </a>
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ test.describe('Landing Quick Start CLI Tab (Real API)', () => {
     await setEnglishLocale(page)
   })
 
-  test('renders three peer tabs and exposes the CLI install command', async ({ page }) => {
+  test('renders three peer tabs and exposes the CLI install commands', async ({ page }) => {
     await page.goto('/')
 
     const agentTab = page.getByRole('button', { name: 'I am Agent', exact: true })
@@ -25,9 +25,12 @@ test.describe('Landing Quick Start CLI Tab (Real API)', () => {
     await expect(humanTab).toHaveAttribute('aria-pressed', 'false')
 
     await expect(
-      page.getByText('Install the 智创技能广场 CLI locally to run skillhub install for skills.'),
+      page.getByText('Two ways to install SkillHub CLI, connect to your registry via --registry'),
     ).toBeVisible()
-    await expect(page.getByText('npm i -g @astron-team/skillhub', { exact: true })).toBeVisible()
+    await expect(page.getByText('npm install -g @astron-team/skillhub')).toBeVisible()
+    await expect(page.getByText('skillhub search email --registry')).toBeVisible()
+    await expect(page.getByText('npx @astron-team/skillhub@latest')).toBeVisible()
+    await expect(page.getByText('Full guide →')).toBeVisible()
   })
 
   test('agent and human tabs keep their original commands', async ({ page }) => {

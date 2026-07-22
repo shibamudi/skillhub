@@ -128,7 +128,9 @@ In the browser, you can add the `X-Mock-User-Id` header via a browser extension 
 
 ## Install the CLI Tool
 
-SkillHub is compatible with the OpenClaw CLI. You can use the `npx clawhub` command to manage skill packages:
+SkillHub provides multiple CLI tools. Choose any one to manage skill packages:
+
+### Option 1: ClawHub CLI (OpenClaw-compatible, run via npx)
 
 ```bash
 # Configure the SkillHub registry URL
@@ -142,6 +144,29 @@ npx clawhub install my-skill
 
 # Publish a skill package
 npx clawhub publish ./my-skill
+```
+
+### Option 2: SkillHub CLI (npm global install)
+
+```bash
+# Install the CLI
+npm install -g @astron-team/skillhub
+
+# Search for skill packages (--registry specifies the registry URL)
+skillhub search email --registry http://localhost:8080
+
+# Install a skill package
+skillhub install my-skill --registry http://localhost:8080
+```
+
+### Option 3: SkillHub CLI (run via npx, no installation required)
+
+```bash
+# Search for skill packages (--registry specifies the registry URL)
+npx @astron-team/skillhub@latest search email --registry http://localhost:8080
+
+# Install a skill package
+npx @astron-team/skillhub@latest install my-skill --registry http://localhost:8080
 ```
 
 ## Publish Your First Skill Package
