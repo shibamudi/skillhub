@@ -30,6 +30,7 @@ test.describe('Landing Quick Start CLI Tab (Real API)', () => {
     await expect(page.getByText('npm install -g @astron-team/skillhub')).toBeVisible()
     await expect(page.getByText('skillhub search email --registry')).toBeVisible()
     await expect(page.getByText('npx @astron-team/skillhub@latest')).toBeVisible()
+    await expect(page.getByText('Full guide →')).toBeVisible()
   })
 
   test('agent and human tabs expose their commands', async ({ page }) => {

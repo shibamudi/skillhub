@@ -28,6 +28,8 @@ describe('landing quick start locales', () => {
     expect(en.landing.quickStart.cli.commandTemplate).toContain('npm install -g @astron-team/skillhub')
     expect(en.landing.quickStart.cli.commandTemplate).toContain('npx @astron-team/skillhub@latest')
     expect(en.landing.quickStart.cli.commandTemplate).toContain('--registry {{url}}')
+    expect(zh.landing.quickStart.guideLink).toBe('查看完整指南 →')
+    expect(en.landing.quickStart.guideLink).toBe('Full guide →')
   })
 
   it('exposes human (ClawHub) command template with registry setup in both locales', () => {

@@ -33,6 +33,7 @@
         "command": "npm i -g @astron-team/skillhub",
         "commandTemplate": "# Option 1: npm global install\nnpm install -g @astron-team/skillhub\n# Search skills (--registry specifies the registry URL)\nskillhub search email --registry {{url}}\n# Install skills\nskillhub install my-skill --registry {{url}}\n\n# Option 2: npx direct run (no installation required)\nnpx @astron-team/skillhub@latest search email --registry {{url}}\nnpx @astron-team/skillhub@latest install my-skill --registry {{url}}"
       },
+      "guideLink": "Full guide →",
       "agent": {
         "description": "Send a prompt to your Agent to set up the SkillHub Registry",
         "command": "Read https://www.example.com/registry/skill.md and follow the instructions to setup SkillHub Registry",
