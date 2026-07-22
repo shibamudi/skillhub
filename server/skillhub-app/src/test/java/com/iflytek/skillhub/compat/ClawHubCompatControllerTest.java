@@ -248,6 +248,25 @@ class ClawHubCompatControllerTest {
     }
 
     @Test
+    void download_path_with_forwarded_prefix_prepends_context_path_to_redirect_location() throws Exception {
+        mockMvc.perform(get("/api/v1/download/team-ai--my-skill")
+                        .param("version", "latest")
+                        .header("X-Forwarded-Prefix", "/skillhub"))
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "/skillhub/api/v1/skills/team-ai/my-skill/download"));
+    }
+
+    @Test
+    void download_query_with_forwarded_prefix_prepends_context_path_to_redirect_location() throws Exception {
+        mockMvc.perform(get("/api/v1/download")
+                        .param("slug", "team-ai--my-skill")
+                        .param("version", "latest")
+                        .header("X-Forwarded-Prefix", "/skillhub"))
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "/skillhub/api/v1/skills/team-ai/my-skill/download"));
+    }
+
+    @Test
     void download_query_with_legacy_slug_keeps_legacy_lookup_behavior() throws Exception {
         when(compatSkillLookupService.findByLegacySlug("my-skill"))
                 .thenReturn(legacyCompatContext("global", "my-skill"));

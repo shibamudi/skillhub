@@ -75,17 +75,19 @@ public class ClawHubCompatController {
     @RateLimit(category = "download", authenticated = 60, anonymous = 20)
     @GetMapping("/download/{canonicalSlug}")
     public ResponseEntity<Void> downloadByPath(@PathVariable String canonicalSlug,
-                                               @RequestParam(defaultValue = "latest") String version) {
-        return redirect(clawHubCompatAppService.downloadLocationByPath(canonicalSlug, version));
+                                               @RequestParam(defaultValue = "latest") String version,
+                                               HttpServletRequest request) {
+        return redirect(clawHubCompatAppService.downloadLocationByPath(canonicalSlug, version), request);
     }
 
     @RateLimit(category = "download", authenticated = 60, anonymous = 20)
     @GetMapping("/download")
     public ResponseEntity<Void> downloadByQuery(@RequestParam String slug,
-                                                @RequestParam(defaultValue = "latest") String version,
-                                                @RequestAttribute(value = "userId", required = false) String userId,
-                                                @RequestAttribute(value = "userNsRoles", required = false) Map<Long, NamespaceRole> userNsRoles) {
-        return redirect(clawHubCompatAppService.downloadLocationByQuery(slug, version, userId, userNsRoles));
+                                                 @RequestParam(defaultValue = "latest") String version,
+                                                 @RequestAttribute(value = "userId", required = false) String userId,
+                                                 @RequestAttribute(value = "userNsRoles", required = false) Map<Long, NamespaceRole> userNsRoles,
+                                                 HttpServletRequest request) {
+        return redirect(clawHubCompatAppService.downloadLocationByQuery(slug, version, userId, userNsRoles), request);
     }
 
     @RateLimit(category = "skills", authenticated = 60, anonymous = 20)
@@ -174,9 +176,11 @@ public class ClawHubCompatController {
         return clawHubCompatAppService.whoami(principal);
     }
 
-    private ResponseEntity<Void> redirect(String location) {
+    private ResponseEntity<Void> redirect(String location, HttpServletRequest request) {
+        String contextPath = request.getContextPath();
+        String fullLocation = contextPath + location;
         return ResponseEntity.status(HttpStatus.FOUND)
-                .header(HttpHeaders.LOCATION, location)
+                .header(HttpHeaders.LOCATION, fullLocation)
                 .build();
     }
 }
