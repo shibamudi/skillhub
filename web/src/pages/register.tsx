@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ApiError } from '@/api/client'
 import { LoginButton } from '@/features/auth/login-button'
 import { useLocalRegister } from '@/features/auth/use-local-auth'
+import { parseReturnToNavigation } from '@/shared/lib/skill-navigation'
 import { Button } from '@/shared/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card'
 import { Input } from '@/shared/ui/input'
@@ -158,7 +159,8 @@ export function RegisterPage() {
     setFormError(null)
     try {
       await registerMutation.mutateAsync({ username: trimmedUsername, email: trimmedEmail, password })
-      await navigate({ to: returnTo })
+      const { to, search: returnSearch } = parseReturnToNavigation(returnTo)
+      await navigate({ to, search: returnSearch })
     } catch (error) {
       const { fieldErrors: nextApiFieldErrors, formError: nextFormError } = mapRegisterApiError(error)
       setFieldErrors(nextApiFieldErrors ?? {})

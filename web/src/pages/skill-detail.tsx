@@ -30,7 +30,7 @@ import { useSubmitSkillReport } from '@/features/report/use-skill-reports'
 import { SecurityAuditSummary } from '@/features/security-audit/security-audit-summary'
 import { formatLocalDateTime } from '@/shared/lib/date-time'
 import { incrementSkillDownloadCount } from '@/shared/lib/skill-download-cache'
-import { getSkillSquareSearch, normalizeSkillDetailReturnTo } from '@/shared/lib/skill-navigation'
+import { getSkillSquareSearch, normalizeSkillDetailReturnTo, parseReturnToNavigation } from '@/shared/lib/skill-navigation'
 import { formatCompactCount } from '@/shared/lib/number-format'
 import { resolveDocumentationFilePath } from '@/shared/lib/skill-documentation'
 import { getHeadlineVersion, getOwnerPreviewVersion, getPublishedVersion } from '@/shared/lib/skill-lifecycle'
@@ -405,7 +405,8 @@ export function SkillDetailPage() {
   const handleBack = () => {
     const returnTo = normalizeSkillDetailReturnTo(search.returnTo)
     if (returnTo) {
-      navigate({ to: returnTo })
+      const { to, search: returnSearch } = parseReturnToNavigation(returnTo)
+      navigate({ to, search: returnSearch })
       return
     }
     navigate({ to: '/search', search: getSkillSquareSearch() })
@@ -535,7 +536,9 @@ export function SkillDetailPage() {
         t('skillDetail.deleteSkillSuccessDescription', { skill: skill.displayName }),
       )
       setDeleteSkillInputOpen(false)
-      navigate({ to: resolveDeletedSkillReturnTo(search.returnTo) })
+      const deleteReturnTo = resolveDeletedSkillReturnTo(search.returnTo)
+      const { to, search: returnSearch } = parseReturnToNavigation(deleteReturnTo)
+      navigate({ to, search: returnSearch })
       queryClient.removeQueries({ queryKey: ['skills', namespace, slug] })
       queryClient.invalidateQueries({ queryKey: ['skills', 'my'] })
     } catch (error) {

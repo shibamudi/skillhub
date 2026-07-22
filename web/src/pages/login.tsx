@@ -8,6 +8,7 @@ import { SessionBootstrapEntry } from '@/features/auth/session-bootstrap-entry'
 import { useAuth } from '@/features/auth/use-auth'
 import { useAuthMethods } from '@/features/auth/use-auth-methods'
 import { usePasswordLogin } from '@/features/auth/use-password-login'
+import { parseReturnToNavigation } from '@/shared/lib/skill-navigation'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
@@ -84,7 +85,8 @@ export function LoginPage() {
     setFieldErrors({})
     try {
       await loginMutation.mutateAsync({ username: trimmedUsername, password })
-      await navigate({ to: returnTo })
+      const { to, search: returnSearch } = parseReturnToNavigation(returnTo)
+      await navigate({ to, search: returnSearch })
     } catch {
       // mutation state drives the error UI
     }
@@ -112,7 +114,10 @@ export function LoginPage() {
             ) : null}
             <SessionBootstrapEntry
               methodDisplayName={bootstrapMethod?.displayName}
-              onAuthenticated={() => navigate({ to: returnTo })}
+              onAuthenticated={async () => {
+                const { to, search: returnSearch } = parseReturnToNavigation(returnTo)
+                await navigate({ to, search: returnSearch })
+              }}
             />
 
             <Tabs defaultValue="password" className="space-y-6">
