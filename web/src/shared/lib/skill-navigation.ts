@@ -27,12 +27,18 @@ export function parseReturnToNavigation(returnTo: string): {
   to: string
   search: Record<string, string>
 } {
-  // returnTo is always a relative path starting with '/', so use a dummy
-  // origin to avoid relying on window (works in SSR/test contexts too).
   const url = new URL(returnTo, 'http://localhost')
+  let pathname = url.pathname
+  // When deployed behind a reverse proxy (e.g. Traefik with PathPrefix),
+  // window.location.pathname includes the base path (e.g. "/skillhub/search")
+  // but navigate({ to }) expects a route path without it.
+  const basePath = import.meta.env.VITE_BASE_PATH
+  if (basePath && basePath !== '/' && pathname.startsWith(basePath)) {
+    pathname = pathname.slice(basePath.length) || '/'
+  }
   const search: Record<string, string> = {}
   url.searchParams.forEach((value, key) => {
     search[key] = value
   })
-  return { to: url.pathname, search }
+  return { to: pathname, search }
 }
