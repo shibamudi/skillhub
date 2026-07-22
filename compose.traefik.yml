@@ -7,6 +7,7 @@
 #
 # Auth architecture (three routers on the web container):
 #   /skillhub/.well-known/*                     → StripPrefix only     → web container → nginx → backend
+#   /skillhub/registry/skill.md                 → StripPrefix only     → web container → nginx (static file)
 #   /skillhub/api/v1/{search,resolve,download,    (SkillHub handles     (SkillHub handles
 #     skills,stars,publish,whoami,labels,         Bearer/Device auth)    Bearer/Device auth)
 #     auth/device} + /skillhub/api/cli/*
@@ -37,6 +38,7 @@
 #                     GET /api/cli/v1/auth/whoami
 #   Device auth:      POST /api/v1/auth/device/code, POST /api/v1/auth/device/token
 #   Discovery:        GET /.well-known/clawhub.json
+#   Agent skill:      GET /registry/skill.md
 #
 # Prerequisites:
 # 1. Traefik must be running and connected to the 'shared' network
@@ -200,7 +202,8 @@ services:
         PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/publish`) ||
         PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/v1/labels`) ||
         PathPrefix(`${TRAEFIK_PATH_PREFIX:-/skillhub}/api/cli/v1/`) ||
-        Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/.well-known/clawhub.json`)
+        Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/.well-known/clawhub.json`) ||
+        Path(`${TRAEFIK_PATH_PREFIX:-/skillhub}/registry/skill.md`)
       - traefik.http.routers.skillhub-web-cli.middlewares=skillhub-strip
 
       - traefik.http.middlewares.skillhub-strip.stripprefix.prefixes=${TRAEFIK_PATH_PREFIX:-/skillhub}
