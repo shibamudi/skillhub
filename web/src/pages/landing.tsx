@@ -46,11 +46,11 @@ export function LandingPage() {
       <main ref={heroView.ref} className={`relative z-10 flex flex-col items-center pt-16 pb-20 px-4 md:pt-24 scroll-fade-up${heroView.inView ? ' in-view' : ''}`}>
         <div className="flex flex-col items-center mb-4">
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-brand-gradient">
-            智创技能广场
+            智创技能广场 · SkillHub-SDU
           </h1>
         </div>
         <p
-          className="text-base md:text-lg text-center max-w-2xl mb-10 leading-relaxed"
+          className="text-base md:text-lg text-center max-w-2xl mb-10 leading-relaxed whitespace-pre-line"
           style={{ color: 'hsl(var(--text-secondary))' }}
         >
           {t('landing.hero.subtitle')}

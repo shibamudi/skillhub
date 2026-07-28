@@ -77,7 +77,7 @@ export function Layout() {
           <SDULogo height={32} />
           <span className="h-5 w-px bg-gray-300" />
           <span className="text-xl font-semibold tracking-tight text-brand-gradient whitespace-nowrap">
-            智创技能广场
+            智创技能广场 · SkillHub-SDU
           </span>
         </Link>
 
@@ -144,7 +144,7 @@ export function Layout() {
               <div className="flex items-center gap-3 mb-3">
                 <SDULogo height={26} />
                 <span className="h-4 w-px bg-gray-300" />
-                <span className="text-lg font-bold text-brand-gradient whitespace-nowrap">智创技能广场</span>
+                <span className="text-lg font-bold text-brand-gradient whitespace-nowrap">智创技能广场 · SkillHub-SDU</span>
               </div>
               <p className="text-sm max-w-xs" style={{ color: 'hsl(var(--text-secondary))' }}>
                 {t('layout.footerDescription')}
