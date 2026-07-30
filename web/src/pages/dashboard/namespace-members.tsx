@@ -54,7 +54,9 @@ export function NamespaceMembersPage() {
   const updateRoleMutation = useUpdateNamespaceMemberRole()
   const removeMemberMutation = useRemoveNamespaceMember()
 
-  const members = membersPage?.items ?? []
+  // Owner is the platform admin by convention; excluded from the team member
+  // list. The transfer dialog filters non-owner candidates independently.
+  const members = (membersPage?.items ?? []).filter((member) => member.role !== 'OWNER')
   const totalMembers = membersPage?.total ?? 0
   const totalPages = Math.max(1, Math.ceil(totalMembers / MEMBER_PAGE_SIZE))
 
