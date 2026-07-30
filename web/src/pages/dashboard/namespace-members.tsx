@@ -54,14 +54,15 @@ export function NamespaceMembersPage() {
   const updateRoleMutation = useUpdateNamespaceMemberRole()
   const removeMemberMutation = useRemoveNamespaceMember()
 
-  // Owner is the platform admin by convention; excluded from the team member
-  // list. The transfer dialog filters non-owner candidates independently.
-  const members = (membersPage?.items ?? []).filter((member) => member.role !== 'OWNER')
-  const totalMembers = membersPage?.total ?? 0
-  const totalPages = Math.max(1, Math.ceil(totalMembers / MEMBER_PAGE_SIZE))
-
   const currentNamespace = myNamespaces?.find((item) => item.slug === slug)
   const currentUserRole = currentNamespace?.currentUserRole
+  // Owner is the platform admin by convention; hide the owner row unless the
+  // current viewer is the owner, so an admin sees themselves in their own ns.
+  const members = (membersPage?.items ?? []).filter(
+    (member) => member.role !== 'OWNER' || currentUserRole === 'OWNER',
+  )
+  const totalMembers = membersPage?.total ?? 0
+  const totalPages = Math.max(1, Math.ceil(totalMembers / MEMBER_PAGE_SIZE))
   const isReadOnly = namespace?.type === 'GLOBAL' || namespace?.status !== 'ACTIVE'
   // Membership changes are only allowed in active team namespaces and only for
   // elevated roles surfaced through the current user's namespace membership.
